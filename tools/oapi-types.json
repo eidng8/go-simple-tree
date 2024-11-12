@@ -1,0 +1,10 @@
+{
+  "package": "api",
+  "generate": {
+    "models": true
+  },
+  "output": "tools/types.gen.go",
+  "output-options": {
+    "nullable-type": true
+  }
+}

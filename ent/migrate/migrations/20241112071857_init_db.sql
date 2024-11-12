@@ -1,0 +1,2 @@
+-- Create "simple_tree" table
+CREATE TABLE `simple_tree` (`id` int unsigned NOT NULL AUTO_INCREMENT, `deleted_at` timestamp NULL, `name` varchar(255) NOT NULL COMMENT "Item name", `created_at` timestamp NULL, `updated_at` timestamp NULL, `parent_id` int unsigned NULL, PRIMARY KEY (`id`), INDEX `simple_tree_simple_tree_children` (`parent_id`), CONSTRAINT `simple_tree_simple_tree_children` FOREIGN KEY (`parent_id`) REFERENCES `simple_tree` (`id`) ON UPDATE NO ACTION ON DELETE RESTRICT) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT "Item table";

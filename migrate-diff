@@ -1,0 +1,5 @@
+#!/bin/env bash
+
+#atlas migrate diff init_db --dir "file://ent/migrate/migrations" --to "ent://ent/schema" --dev-url "docker://mysql/8/ent"
+
+#go run -mod=mod ent/migrate/main.go init_db
