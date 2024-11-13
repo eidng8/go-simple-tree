@@ -10,11 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/eidng8/go-simple-tree/ent/item"
 	"github.com/eidng8/go-simple-tree/ent/schema"
-	"github.com/eidng8/go-simple-tree/ent/simpletree"
 )
 
-func Test_CreateSimpleTree_creates_new_record(t *testing.T) {
+func Test_CreateItem_creates_new_record(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
 	body := `{"name":"test name","abbr":"test abbr","parent_id":1}`
 	req, _ := http.NewRequest(
@@ -23,12 +23,12 @@ func Test_CreateSimpleTree_creates_new_record(t *testing.T) {
 	engine.ServeHTTP(res, req)
 	assert.Equal(t, http.StatusCreated, res.Code)
 	actual := res.Body.String()
-	aa, err := entClient.SimpleTree.Query().Where(simpletree.NameEQ("test name")).
-		Where(simpletree.ParentIDEQ(1)).Only(context.Background())
+	aa, err := entClient.Item.Query().Where(item.NameEQ("test name")).
+		Where(item.ParentIDEQ(1)).Only(context.Background())
 	require.Nil(t, err, "failed to find the created record in database")
 	pid := uint32(1)
 	b, err := jsoniter.Marshal(
-		CreateSimpleTree201JSONResponse{
+		CreateItem201JSONResponse{
 			Id:        51,
 			ParentId:  &pid,
 			Name:      "test name",
@@ -41,7 +41,7 @@ func Test_CreateSimpleTree_creates_new_record(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_CreateSimpleTree_422(t *testing.T) {
+func Test_CreateItem_422(t *testing.T) {
 	engine, _, res := setupGinTest(t)
 	body := `{"name":"a"}`
 	req, _ := http.NewRequest(

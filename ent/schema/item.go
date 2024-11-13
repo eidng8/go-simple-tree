@@ -21,11 +21,11 @@ const BaseUri = "/simple-tree"
 // TableName is the name of the table in the database.
 const TableName = "simple_tree"
 
-type SimpleTree struct {
+type Item struct {
 	ent.Schema
 }
 
-func (SimpleTree) Annotations() []schema.Annotation {
+func (Item) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{
 			Table:     TableName,
@@ -38,7 +38,7 @@ func (SimpleTree) Annotations() []schema.Annotation {
 	}
 }
 
-func (SimpleTree) Fields() []ent.Field {
+func (Item) Fields() []ent.Field {
 	u2 := uint64(2)
 	u255 := uint64(255)
 	return append(
@@ -71,22 +71,22 @@ func (SimpleTree) Fields() []ent.Field {
 	)
 }
 
-func (SimpleTree) Mixin() []ent.Mixin {
+func (Item) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		// Comment out these when running `go generate` for the first time
 		softdelete.Mixin{},
-		simpletree.ParentU32Mixin[SimpleTree]{},
+		simpletree.ParentU32Mixin[Item]{},
 	}
 }
 
-func (SimpleTree) Interceptors() []ent.Interceptor {
+func (Item) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		// Comment out this when running `go generate` for the first time
 		softdelete.Interceptor(intercept.NewQuery),
 	}
 }
 
-func (SimpleTree) Hooks() []ent.Hook {
+func (Item) Hooks() []ent.Hook {
 	return []ent.Hook{
 		// Comment out this when running `go generate` for the first time
 		softdelete.Mutator[*gen.Client](),

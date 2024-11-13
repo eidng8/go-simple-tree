@@ -44,7 +44,7 @@ func generate() error {
 func newOasExtension() (*entoas.Extension, error) {
 	return entoas.NewExtension(
 		entoas.Mutations(
-			func(_ *gen.Graph, s *ogen.Spec) error {
+			func(g *gen.Graph, s *ogen.Spec) error {
 				// Comment out these when running `go generate` for the first time
 				changeBaseUri(s)
 				genSpec(s)
@@ -55,12 +55,12 @@ func newOasExtension() (*entoas.Extension, error) {
 				simpletree.RemoveEdges(ep.Post)
 				paginate.AttachTo(
 					op, "Paginated list of items",
-					"#/components/schemas/SimpleTreeList",
+					"#/components/schemas/ItemList",
 				)
 				ep = s.Paths[BaseUri+"/{id}"]
 				simpletree.RemoveEdges(ep.Patch)
 				err := softdelete.AttachTo(
-					s, BaseUri, s.Components.Schemas["SimpleTreeRead"],
+					g.Nodes[0], s, BaseUri, s.Components.Schemas["ItemRead"],
 					ep.Get.Parameters[0],
 				)
 				if err != nil {
@@ -73,7 +73,7 @@ func newOasExtension() (*entoas.Extension, error) {
 				paginate.AttachTo(
 					op,
 					"Paginated list of subordinate items. Pagination is disabled when `recurse` is true.",
-					"#/components/schemas/SimpleTreeList",
+					"#/components/schemas/ItemList",
 				)
 				return nil
 			},
@@ -95,7 +95,7 @@ func genConfig() *gen.Config {
 func changeBaseUri(spec *ogen.Spec) {
 	paths := make(ogen.Paths, len(spec.Paths))
 	for key, path := range spec.Paths {
-		nk := strings.Replace(key, "/simple-trees", BaseUri, 1)
+		nk := strings.Replace(key, "/items", BaseUri, 1)
 		paths[nk] = path
 	}
 	spec.SetPaths(paths)

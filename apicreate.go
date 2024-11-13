@@ -8,19 +8,19 @@ import (
 	"github.com/eidng8/go-simple-tree/ent"
 )
 
-type CreateSimpleTree201JSONResponse SimpleTreeCreate
+type CreateItem201JSONResponse ItemCreate
 
-func (response CreateSimpleTree201JSONResponse) VisitCreateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response CreateItem201JSONResponse) VisitCreateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(201)
 	return json.NewEncoder(w).Encode(response)
 }
 
-// CreateSimpleTree Create a new SimpleTree
+// CreateItem Create a new Item
 // (POST /simple-tree)
-func (s Server) CreateSimpleTree(
-	ctx context.Context, request CreateSimpleTreeRequestObject,
-) (CreateSimpleTreeResponseObject, error) {
+func (s Server) CreateItem(
+	ctx context.Context, request CreateItemRequestObject,
+) (CreateItemResponseObject, error) {
 	tx, err := s.EC.Tx(ctx)
 	if err != nil {
 		return nil, err
@@ -30,12 +30,12 @@ func (s Server) CreateSimpleTree(
 			_ = tx.Rollback()
 		}
 	}()
-	ac := tx.SimpleTree.Create()
+	ac := tx.Item.Create()
 	ac.SetName(request.Body.Name)
 	if request.Body.ParentId != nil {
 		ac.SetParentID(*request.Body.ParentId)
 	}
-	var aa *ent.SimpleTree
+	var aa *ent.Item
 	aa, err = ac.Save(ctx)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (s Server) CreateSimpleTree(
 		val := *aa.ParentID
 		pid = &val
 	}
-	return CreateSimpleTree201JSONResponse{
+	return CreateItem201JSONResponse{
 		Id:        aa.ID,
 		ParentId:  pid,
 		Name:      aa.Name,

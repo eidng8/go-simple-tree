@@ -8,9 +8,9 @@ import (
 	"github.com/eidng8/go-simple-tree/ent"
 )
 
-func (s Server) RestoreSimpleTree(
-	ctx context.Context, request RestoreSimpleTreeRequestObject,
-) (RestoreSimpleTreeResponseObject, error) {
+func (s Server) RestoreItem(
+	ctx context.Context, request RestoreItemRequestObject,
+) (RestoreItemResponseObject, error) {
 	qc := softdelete.IncludeTrashed(ctx)
 	id := request.Id
 	tx, err := s.EC.Tx(qc)
@@ -22,10 +22,10 @@ func (s Server) RestoreSimpleTree(
 			_ = tx.Rollback()
 		}
 	}()
-	err = tx.SimpleTree.UpdateOneID(id).ClearDeletedAt().Exec(qc)
+	err = tx.Item.UpdateOneID(id).ClearDeletedAt().Exec(qc)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return RestoreSimpleTree404JSONResponse{}, nil
+			return RestoreItem404JSONResponse{}, nil
 		}
 		return nil, err
 	}
@@ -33,5 +33,5 @@ func (s Server) RestoreSimpleTree(
 	if err != nil {
 		return nil, err
 	}
-	return RestoreSimpleTree204Response{}, nil
+	return RestoreItem204Response{}, nil
 }

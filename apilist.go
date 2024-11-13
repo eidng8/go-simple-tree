@@ -10,31 +10,31 @@ import (
 	"github.com/eidng8/go-ent/paginate"
 
 	"github.com/eidng8/go-simple-tree/ent"
-	"github.com/eidng8/go-simple-tree/ent/simpletree"
+	"github.com/eidng8/go-simple-tree/ent/item"
 )
 
-// ListSimpleTree List all SimpleTrees
+// ListItem List all Items
 // (GET /simple-tree)
-func (s Server) ListSimpleTree(
-	ctx context.Context, request ListSimpleTreeRequestObject,
-) (ListSimpleTreeResponseObject, error) {
+func (s Server) ListItem(
+	ctx context.Context, request ListItemRequestObject,
+) (ListItemResponseObject, error) {
 	c := ctx.(*gin.Context)
 	pageParams := paginate.GetPaginationParams(c)
-	query := s.EC.SimpleTree.Query().Order(simpletree.ByID())
+	query := s.EC.Item.Query().Order(item.ByID())
 	qc := softdelete.NewSoftDeleteQueryContext(request.Params.Trashed, ctx)
 	applyNameFilter(request, query)
-	areas, err := paginate.GetPage[ent.SimpleTree](c, qc, query, pageParams)
+	areas, err := paginate.GetPage[ent.Item](c, qc, query, pageParams)
 	if err != nil {
 		return nil, err
 	}
-	return mapPage[ListSimpleTree200JSONResponse](areas), nil
+	return mapPage[ListItem200JSONResponse](areas), nil
 }
 
 func applyNameFilter(
-	request ListSimpleTreeRequestObject, query *ent.SimpleTreeQuery,
+	request ListItemRequestObject, query *ent.ItemQuery,
 ) {
 	name := request.Params.Name
 	if name != nil && utf8.RuneCountInString(*name) > 1 {
-		query.Where(simpletree.NameHasPrefix(*name))
+		query.Where(item.NameHasPrefix(*name))
 	}
 }

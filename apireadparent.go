@@ -4,32 +4,32 @@ import (
 	"context"
 
 	"github.com/eidng8/go-simple-tree/ent"
-	"github.com/eidng8/go-simple-tree/ent/simpletree"
+	"github.com/eidng8/go-simple-tree/ent/item"
 )
 
-// ReadSimpleTreeParent Find a SimpleTree by ID
+// ReadItemParent Find a Item by ID
 // (GET /simple-tree/{id}/parent)
-func (s Server) ReadSimpleTreeParent(
-	ctx context.Context, request ReadSimpleTreeParentRequestObject,
-) (ReadSimpleTreeParentResponseObject, error) {
-	area, err := s.EC.SimpleTree.Query().Where(simpletree.ID(uint32(request.Id))).
+func (s Server) ReadItemParent(
+	ctx context.Context, request ReadItemParentRequestObject,
+) (ReadItemParentResponseObject, error) {
+	area, err := s.EC.Item.Query().Where(item.ID(uint32(request.Id))).
 		WithParent().Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return ReadSimpleTreeParent404JSONResponse{}, nil
+			return ReadItemParent404JSONResponse{}, nil
 		}
 		return nil, err
 	}
 	if nil == area || nil == area.Edges.Parent {
-		return ReadSimpleTreeParent404JSONResponse{}, nil
+		return ReadItemParent404JSONResponse{}, nil
 	}
-	return newReadSimpleTreeParent200JSONResponseFromEnt(area.Edges.Parent), nil
+	return newReadItemParent200JSONResponseFromEnt(area.Edges.Parent), nil
 }
 
-func newReadSimpleTreeParent200JSONResponseFromEnt(
-	eaa *ent.SimpleTree,
-) ReadSimpleTreeParent200JSONResponse {
-	aar := ReadSimpleTreeParent200JSONResponse{}
+func newReadItemParent200JSONResponseFromEnt(
+	eaa *ent.Item,
+) ReadItemParent200JSONResponse {
+	aar := ReadItemParent200JSONResponse{}
 	aar.Id = eaa.ID
 	aar.Name = eaa.Name
 	if eaa.ParentID != nil {

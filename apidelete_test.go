@@ -13,7 +13,7 @@ import (
 	"github.com/eidng8/go-simple-tree/ent/schema"
 )
 
-func Test_DeleteSimpleTree_should_delete_by_id(t *testing.T) {
+func Test_DeleteItem_should_delete_by_id(t *testing.T) {
 	engine, entClient, response := setupGinTest(t)
 	req, _ := http.NewRequest(http.MethodDelete, schema.BaseUri+"/1", nil)
 	engine.ServeHTTP(response, req)
@@ -39,9 +39,9 @@ func Test_DeleteSimpleTree_should_delete_by_id(t *testing.T) {
 	assert.True(t, deletedAt.Valid)
 }
 
-func Test_DeleteSimpleTree_should_physically_delete_if_requested(t *testing.T) {
+func Test_DeleteItem_should_physically_delete_if_requested(t *testing.T) {
 	engine, entClient, response := setupGinTest(t)
-	entClient.SimpleTree.UpdateOneID(1).SetDeletedAt(time.Now()).
+	entClient.Item.UpdateOneID(1).SetDeletedAt(time.Now()).
 		ExecX(context.Background())
 	req, _ := http.NewRequest(
 		http.MethodDelete, schema.BaseUri+"/1?trashed=1", nil,
@@ -64,7 +64,7 @@ func Test_DeleteSimpleTree_should_physically_delete_if_requested(t *testing.T) {
 	assert.False(t, rs.Next())
 }
 
-func Test_DeleteSimpleTree_should_return_404_if_not_found(t *testing.T) {
+func Test_DeleteItem_should_return_404_if_not_found(t *testing.T) {
 	engine, _, res := setupGinTest(t)
 	req, _ := http.NewRequest(
 		http.MethodDelete, schema.BaseUri+"/987654321", nil,

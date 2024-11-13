@@ -22,30 +22,30 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// List SimpleTrees
+	// List Items
 	// (GET /simple-tree)
-	ListSimpleTree(c *gin.Context, params ListSimpleTreeParams)
-	// Create a new SimpleTree
+	ListItem(c *gin.Context, params ListItemParams)
+	// Create a new Item
 	// (POST /simple-tree)
-	CreateSimpleTree(c *gin.Context)
-	// Deletes a SimpleTree by ID
+	CreateItem(c *gin.Context)
+	// Deletes a Item by ID
 	// (DELETE /simple-tree/{id})
-	DeleteSimpleTree(c *gin.Context, id uint32, params DeleteSimpleTreeParams)
-	// Find a SimpleTree by ID
+	DeleteItem(c *gin.Context, id uint32, params DeleteItemParams)
+	// Find a Item by ID
 	// (GET /simple-tree/{id})
-	ReadSimpleTree(c *gin.Context, id uint32, params ReadSimpleTreeParams)
-	// Updates a SimpleTree
+	ReadItem(c *gin.Context, id uint32, params ReadItemParams)
+	// Updates a Item
 	// (PATCH /simple-tree/{id})
-	UpdateSimpleTree(c *gin.Context, id uint32)
+	UpdateItem(c *gin.Context, id uint32)
 	// List of subordinate items
 	// (GET /simple-tree/{id}/children)
-	ListSimpleTreeChildren(c *gin.Context, id uint32, params ListSimpleTreeChildrenParams)
-	// Find the attached SimpleTree
+	ListItemChildren(c *gin.Context, id uint32, params ListItemChildrenParams)
+	// Find the attached Item
 	// (GET /simple-tree/{id}/parent)
-	ReadSimpleTreeParent(c *gin.Context, id uint32)
+	ReadItemParent(c *gin.Context, id uint32)
 	// Restore a trashed record
 	// (POST /simple-tree/{id}/restore)
-	RestoreSimpleTree(c *gin.Context, id uint32)
+	RestoreItem(c *gin.Context, id uint32)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -57,13 +57,13 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(c *gin.Context)
 
-// ListSimpleTree operation middleware
-func (siw *ServerInterfaceWrapper) ListSimpleTree(c *gin.Context) {
+// ListItem operation middleware
+func (siw *ServerInterfaceWrapper) ListItem(c *gin.Context) {
 
 	var err error
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params ListSimpleTreeParams
+	var params ListItemParams
 
 	// ------------- Optional query parameter "page" -------------
 
@@ -104,11 +104,11 @@ func (siw *ServerInterfaceWrapper) ListSimpleTree(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.ListSimpleTree(c, params)
+	siw.Handler.ListItem(c, params)
 }
 
-// CreateSimpleTree operation middleware
-func (siw *ServerInterfaceWrapper) CreateSimpleTree(c *gin.Context) {
+// CreateItem operation middleware
+func (siw *ServerInterfaceWrapper) CreateItem(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -117,11 +117,11 @@ func (siw *ServerInterfaceWrapper) CreateSimpleTree(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.CreateSimpleTree(c)
+	siw.Handler.CreateItem(c)
 }
 
-// DeleteSimpleTree operation middleware
-func (siw *ServerInterfaceWrapper) DeleteSimpleTree(c *gin.Context) {
+// DeleteItem operation middleware
+func (siw *ServerInterfaceWrapper) DeleteItem(c *gin.Context) {
 
 	var err error
 
@@ -135,7 +135,7 @@ func (siw *ServerInterfaceWrapper) DeleteSimpleTree(c *gin.Context) {
 	}
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params DeleteSimpleTreeParams
+	var params DeleteItemParams
 
 	// ------------- Optional query parameter "trashed" -------------
 
@@ -152,11 +152,11 @@ func (siw *ServerInterfaceWrapper) DeleteSimpleTree(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.DeleteSimpleTree(c, id, params)
+	siw.Handler.DeleteItem(c, id, params)
 }
 
-// ReadSimpleTree operation middleware
-func (siw *ServerInterfaceWrapper) ReadSimpleTree(c *gin.Context) {
+// ReadItem operation middleware
+func (siw *ServerInterfaceWrapper) ReadItem(c *gin.Context) {
 
 	var err error
 
@@ -170,7 +170,7 @@ func (siw *ServerInterfaceWrapper) ReadSimpleTree(c *gin.Context) {
 	}
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params ReadSimpleTreeParams
+	var params ReadItemParams
 
 	// ------------- Optional query parameter "trashed" -------------
 
@@ -187,11 +187,11 @@ func (siw *ServerInterfaceWrapper) ReadSimpleTree(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.ReadSimpleTree(c, id, params)
+	siw.Handler.ReadItem(c, id, params)
 }
 
-// UpdateSimpleTree operation middleware
-func (siw *ServerInterfaceWrapper) UpdateSimpleTree(c *gin.Context) {
+// UpdateItem operation middleware
+func (siw *ServerInterfaceWrapper) UpdateItem(c *gin.Context) {
 
 	var err error
 
@@ -211,11 +211,11 @@ func (siw *ServerInterfaceWrapper) UpdateSimpleTree(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.UpdateSimpleTree(c, id)
+	siw.Handler.UpdateItem(c, id)
 }
 
-// ListSimpleTreeChildren operation middleware
-func (siw *ServerInterfaceWrapper) ListSimpleTreeChildren(c *gin.Context) {
+// ListItemChildren operation middleware
+func (siw *ServerInterfaceWrapper) ListItemChildren(c *gin.Context) {
 
 	var err error
 
@@ -229,7 +229,7 @@ func (siw *ServerInterfaceWrapper) ListSimpleTreeChildren(c *gin.Context) {
 	}
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params ListSimpleTreeChildrenParams
+	var params ListItemChildrenParams
 
 	// ------------- Optional query parameter "page" -------------
 
@@ -270,11 +270,11 @@ func (siw *ServerInterfaceWrapper) ListSimpleTreeChildren(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.ListSimpleTreeChildren(c, id, params)
+	siw.Handler.ListItemChildren(c, id, params)
 }
 
-// ReadSimpleTreeParent operation middleware
-func (siw *ServerInterfaceWrapper) ReadSimpleTreeParent(c *gin.Context) {
+// ReadItemParent operation middleware
+func (siw *ServerInterfaceWrapper) ReadItemParent(c *gin.Context) {
 
 	var err error
 
@@ -294,11 +294,11 @@ func (siw *ServerInterfaceWrapper) ReadSimpleTreeParent(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.ReadSimpleTreeParent(c, id)
+	siw.Handler.ReadItemParent(c, id)
 }
 
-// RestoreSimpleTree operation middleware
-func (siw *ServerInterfaceWrapper) RestoreSimpleTree(c *gin.Context) {
+// RestoreItem operation middleware
+func (siw *ServerInterfaceWrapper) RestoreItem(c *gin.Context) {
 
 	var err error
 
@@ -318,7 +318,7 @@ func (siw *ServerInterfaceWrapper) RestoreSimpleTree(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.RestoreSimpleTree(c, id)
+	siw.Handler.RestoreItem(c, id)
 }
 
 // GinServerOptions provides options for the Gin server.
@@ -348,14 +348,14 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 		ErrorHandler:       errorHandler,
 	}
 
-	router.GET(options.BaseURL+"/simple-tree", wrapper.ListSimpleTree)
-	router.POST(options.BaseURL+"/simple-tree", wrapper.CreateSimpleTree)
-	router.DELETE(options.BaseURL+"/simple-tree/:id", wrapper.DeleteSimpleTree)
-	router.GET(options.BaseURL+"/simple-tree/:id", wrapper.ReadSimpleTree)
-	router.PATCH(options.BaseURL+"/simple-tree/:id", wrapper.UpdateSimpleTree)
-	router.GET(options.BaseURL+"/simple-tree/:id/children", wrapper.ListSimpleTreeChildren)
-	router.GET(options.BaseURL+"/simple-tree/:id/parent", wrapper.ReadSimpleTreeParent)
-	router.POST(options.BaseURL+"/simple-tree/:id/restore", wrapper.RestoreSimpleTree)
+	router.GET(options.BaseURL+"/simple-tree", wrapper.ListItem)
+	router.POST(options.BaseURL+"/simple-tree", wrapper.CreateItem)
+	router.DELETE(options.BaseURL+"/simple-tree/:id", wrapper.DeleteItem)
+	router.GET(options.BaseURL+"/simple-tree/:id", wrapper.ReadItem)
+	router.PATCH(options.BaseURL+"/simple-tree/:id", wrapper.UpdateItem)
+	router.GET(options.BaseURL+"/simple-tree/:id/children", wrapper.ListItemChildren)
+	router.GET(options.BaseURL+"/simple-tree/:id/parent", wrapper.ReadItemParent)
+	router.POST(options.BaseURL+"/simple-tree/:id/restore", wrapper.RestoreItem)
 }
 
 type N400JSONResponse struct {
@@ -382,20 +382,20 @@ type N500JSONResponse struct {
 	Status string       `json:"status" yaml:"status" xml:"status" bson:"status"`
 }
 
-type ListSimpleTreeRequestObject struct {
-	Params ListSimpleTreeParams
+type ListItemRequestObject struct {
+	Params ListItemParams
 }
 
-type ListSimpleTreeResponseObject interface {
-	VisitListSimpleTreeResponse(w http.ResponseWriter) error
+type ListItemResponseObject interface {
+	VisitListItemResponse(w http.ResponseWriter) error
 }
 
-type ListSimpleTree200JSONResponse struct {
+type ListItem200JSONResponse struct {
 	// CurrentPage Page number (1-based)
 	CurrentPage int `json:"current_page" yaml:"current_page" xml:"current_page" bson:"current_page"`
 
 	// Data List of items
-	Data []SimpleTreeList `json:"data" yaml:"data" xml:"data" bson:"data"`
+	Data []ItemList `json:"data" yaml:"data" xml:"data" bson:"data"`
 
 	// FirstPageUrl URL to the first page
 	FirstPageUrl string `json:"first_page_url" yaml:"first_page_url" xml:"first_page_url" bson:"first_page_url"`
@@ -428,269 +428,269 @@ type ListSimpleTree200JSONResponse struct {
 	Total int `json:"total" yaml:"total" xml:"total" bson:"total"`
 }
 
-func (response ListSimpleTree200JSONResponse) VisitListSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ListItem200JSONResponse) VisitListItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTree400JSONResponse struct{ N400JSONResponse }
+type ListItem400JSONResponse struct{ N400JSONResponse }
 
-func (response ListSimpleTree400JSONResponse) VisitListSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ListItem400JSONResponse) VisitListItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTree404JSONResponse struct{ N404JSONResponse }
+type ListItem404JSONResponse struct{ N404JSONResponse }
 
-func (response ListSimpleTree404JSONResponse) VisitListSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ListItem404JSONResponse) VisitListItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTree409JSONResponse struct{ N409JSONResponse }
+type ListItem409JSONResponse struct{ N409JSONResponse }
 
-func (response ListSimpleTree409JSONResponse) VisitListSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ListItem409JSONResponse) VisitListItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTree500JSONResponse struct{ N500JSONResponse }
+type ListItem500JSONResponse struct{ N500JSONResponse }
 
-func (response ListSimpleTree500JSONResponse) VisitListSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ListItem500JSONResponse) VisitListItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type CreateSimpleTreeRequestObject struct {
-	Body *CreateSimpleTreeJSONRequestBody
+type CreateItemRequestObject struct {
+	Body *CreateItemJSONRequestBody
 }
 
-type CreateSimpleTreeResponseObject interface {
-	VisitCreateSimpleTreeResponse(w http.ResponseWriter) error
+type CreateItemResponseObject interface {
+	VisitCreateItemResponse(w http.ResponseWriter) error
 }
 
-type CreateSimpleTree200JSONResponse SimpleTreeCreate
+type CreateItem200JSONResponse ItemCreate
 
-func (response CreateSimpleTree200JSONResponse) VisitCreateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response CreateItem200JSONResponse) VisitCreateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type CreateSimpleTree400JSONResponse struct{ N400JSONResponse }
+type CreateItem400JSONResponse struct{ N400JSONResponse }
 
-func (response CreateSimpleTree400JSONResponse) VisitCreateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response CreateItem400JSONResponse) VisitCreateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type CreateSimpleTree409JSONResponse struct{ N409JSONResponse }
+type CreateItem409JSONResponse struct{ N409JSONResponse }
 
-func (response CreateSimpleTree409JSONResponse) VisitCreateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response CreateItem409JSONResponse) VisitCreateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type CreateSimpleTree500JSONResponse struct{ N500JSONResponse }
+type CreateItem500JSONResponse struct{ N500JSONResponse }
 
-func (response CreateSimpleTree500JSONResponse) VisitCreateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response CreateItem500JSONResponse) VisitCreateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type DeleteSimpleTreeRequestObject struct {
+type DeleteItemRequestObject struct {
 	Id     uint32 `json:"id" yaml:"id" xml:"id" bson:"id"`
-	Params DeleteSimpleTreeParams
+	Params DeleteItemParams
 }
 
-type DeleteSimpleTreeResponseObject interface {
-	VisitDeleteSimpleTreeResponse(w http.ResponseWriter) error
+type DeleteItemResponseObject interface {
+	VisitDeleteItemResponse(w http.ResponseWriter) error
 }
 
-type DeleteSimpleTree204Response struct {
+type DeleteItem204Response struct {
 }
 
-func (response DeleteSimpleTree204Response) VisitDeleteSimpleTreeResponse(w http.ResponseWriter) error {
+func (response DeleteItem204Response) VisitDeleteItemResponse(w http.ResponseWriter) error {
 	w.WriteHeader(204)
 	return nil
 }
 
-type DeleteSimpleTree400JSONResponse struct{ N400JSONResponse }
+type DeleteItem400JSONResponse struct{ N400JSONResponse }
 
-func (response DeleteSimpleTree400JSONResponse) VisitDeleteSimpleTreeResponse(w http.ResponseWriter) error {
+func (response DeleteItem400JSONResponse) VisitDeleteItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type DeleteSimpleTree404JSONResponse struct{ N404JSONResponse }
+type DeleteItem404JSONResponse struct{ N404JSONResponse }
 
-func (response DeleteSimpleTree404JSONResponse) VisitDeleteSimpleTreeResponse(w http.ResponseWriter) error {
+func (response DeleteItem404JSONResponse) VisitDeleteItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type DeleteSimpleTree409JSONResponse struct{ N409JSONResponse }
+type DeleteItem409JSONResponse struct{ N409JSONResponse }
 
-func (response DeleteSimpleTree409JSONResponse) VisitDeleteSimpleTreeResponse(w http.ResponseWriter) error {
+func (response DeleteItem409JSONResponse) VisitDeleteItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type DeleteSimpleTree500JSONResponse struct{ N500JSONResponse }
+type DeleteItem500JSONResponse struct{ N500JSONResponse }
 
-func (response DeleteSimpleTree500JSONResponse) VisitDeleteSimpleTreeResponse(w http.ResponseWriter) error {
+func (response DeleteItem500JSONResponse) VisitDeleteItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTreeRequestObject struct {
+type ReadItemRequestObject struct {
 	Id     uint32 `json:"id" yaml:"id" xml:"id" bson:"id"`
-	Params ReadSimpleTreeParams
+	Params ReadItemParams
 }
 
-type ReadSimpleTreeResponseObject interface {
-	VisitReadSimpleTreeResponse(w http.ResponseWriter) error
+type ReadItemResponseObject interface {
+	VisitReadItemResponse(w http.ResponseWriter) error
 }
 
-type ReadSimpleTree200JSONResponse SimpleTreeRead
+type ReadItem200JSONResponse ItemRead
 
-func (response ReadSimpleTree200JSONResponse) VisitReadSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ReadItem200JSONResponse) VisitReadItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTree400JSONResponse struct{ N400JSONResponse }
+type ReadItem400JSONResponse struct{ N400JSONResponse }
 
-func (response ReadSimpleTree400JSONResponse) VisitReadSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ReadItem400JSONResponse) VisitReadItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTree404JSONResponse struct{ N404JSONResponse }
+type ReadItem404JSONResponse struct{ N404JSONResponse }
 
-func (response ReadSimpleTree404JSONResponse) VisitReadSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ReadItem404JSONResponse) VisitReadItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTree409JSONResponse struct{ N409JSONResponse }
+type ReadItem409JSONResponse struct{ N409JSONResponse }
 
-func (response ReadSimpleTree409JSONResponse) VisitReadSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ReadItem409JSONResponse) VisitReadItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTree500JSONResponse struct{ N500JSONResponse }
+type ReadItem500JSONResponse struct{ N500JSONResponse }
 
-func (response ReadSimpleTree500JSONResponse) VisitReadSimpleTreeResponse(w http.ResponseWriter) error {
+func (response ReadItem500JSONResponse) VisitReadItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type UpdateSimpleTreeRequestObject struct {
+type UpdateItemRequestObject struct {
 	Id   uint32 `json:"id" yaml:"id" xml:"id" bson:"id"`
-	Body *UpdateSimpleTreeJSONRequestBody
+	Body *UpdateItemJSONRequestBody
 }
 
-type UpdateSimpleTreeResponseObject interface {
-	VisitUpdateSimpleTreeResponse(w http.ResponseWriter) error
+type UpdateItemResponseObject interface {
+	VisitUpdateItemResponse(w http.ResponseWriter) error
 }
 
-type UpdateSimpleTree200JSONResponse SimpleTreeUpdate
+type UpdateItem200JSONResponse ItemUpdate
 
-func (response UpdateSimpleTree200JSONResponse) VisitUpdateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response UpdateItem200JSONResponse) VisitUpdateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type UpdateSimpleTree400JSONResponse struct{ N400JSONResponse }
+type UpdateItem400JSONResponse struct{ N400JSONResponse }
 
-func (response UpdateSimpleTree400JSONResponse) VisitUpdateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response UpdateItem400JSONResponse) VisitUpdateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type UpdateSimpleTree404JSONResponse struct{ N404JSONResponse }
+type UpdateItem404JSONResponse struct{ N404JSONResponse }
 
-func (response UpdateSimpleTree404JSONResponse) VisitUpdateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response UpdateItem404JSONResponse) VisitUpdateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type UpdateSimpleTree409JSONResponse struct{ N409JSONResponse }
+type UpdateItem409JSONResponse struct{ N409JSONResponse }
 
-func (response UpdateSimpleTree409JSONResponse) VisitUpdateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response UpdateItem409JSONResponse) VisitUpdateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type UpdateSimpleTree500JSONResponse struct{ N500JSONResponse }
+type UpdateItem500JSONResponse struct{ N500JSONResponse }
 
-func (response UpdateSimpleTree500JSONResponse) VisitUpdateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response UpdateItem500JSONResponse) VisitUpdateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTreeChildrenRequestObject struct {
+type ListItemChildrenRequestObject struct {
 	Id     uint32 `json:"id" yaml:"id" xml:"id" bson:"id"`
-	Params ListSimpleTreeChildrenParams
+	Params ListItemChildrenParams
 }
 
-type ListSimpleTreeChildrenResponseObject interface {
-	VisitListSimpleTreeChildrenResponse(w http.ResponseWriter) error
+type ListItemChildrenResponseObject interface {
+	VisitListItemChildrenResponse(w http.ResponseWriter) error
 }
 
-type ListSimpleTreeChildren200JSONResponse struct {
+type ListItemChildren200JSONResponse struct {
 	// CurrentPage Page number (1-based)
 	CurrentPage int `json:"current_page" yaml:"current_page" xml:"current_page" bson:"current_page"`
 
 	// Data List of items
-	Data []SimpleTreeList `json:"data" yaml:"data" xml:"data" bson:"data"`
+	Data []ItemList `json:"data" yaml:"data" xml:"data" bson:"data"`
 
 	// FirstPageUrl URL to the first page
 	FirstPageUrl string `json:"first_page_url" yaml:"first_page_url" xml:"first_page_url" bson:"first_page_url"`
@@ -723,148 +723,148 @@ type ListSimpleTreeChildren200JSONResponse struct {
 	Total int `json:"total" yaml:"total" xml:"total" bson:"total"`
 }
 
-func (response ListSimpleTreeChildren200JSONResponse) VisitListSimpleTreeChildrenResponse(w http.ResponseWriter) error {
+func (response ListItemChildren200JSONResponse) VisitListItemChildrenResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTreeChildren400JSONResponse struct{ N400JSONResponse }
+type ListItemChildren400JSONResponse struct{ N400JSONResponse }
 
-func (response ListSimpleTreeChildren400JSONResponse) VisitListSimpleTreeChildrenResponse(w http.ResponseWriter) error {
+func (response ListItemChildren400JSONResponse) VisitListItemChildrenResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTreeChildren404JSONResponse struct{ N404JSONResponse }
+type ListItemChildren404JSONResponse struct{ N404JSONResponse }
 
-func (response ListSimpleTreeChildren404JSONResponse) VisitListSimpleTreeChildrenResponse(w http.ResponseWriter) error {
+func (response ListItemChildren404JSONResponse) VisitListItemChildrenResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTreeChildren409JSONResponse struct{ N409JSONResponse }
+type ListItemChildren409JSONResponse struct{ N409JSONResponse }
 
-func (response ListSimpleTreeChildren409JSONResponse) VisitListSimpleTreeChildrenResponse(w http.ResponseWriter) error {
+func (response ListItemChildren409JSONResponse) VisitListItemChildrenResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ListSimpleTreeChildren500JSONResponse struct{ N500JSONResponse }
+type ListItemChildren500JSONResponse struct{ N500JSONResponse }
 
-func (response ListSimpleTreeChildren500JSONResponse) VisitListSimpleTreeChildrenResponse(w http.ResponseWriter) error {
+func (response ListItemChildren500JSONResponse) VisitListItemChildrenResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTreeParentRequestObject struct {
+type ReadItemParentRequestObject struct {
 	Id uint32 `json:"id"`
 }
 
-type ReadSimpleTreeParentResponseObject interface {
-	VisitReadSimpleTreeParentResponse(w http.ResponseWriter) error
+type ReadItemParentResponseObject interface {
+	VisitReadItemParentResponse(w http.ResponseWriter) error
 }
 
-type ReadSimpleTreeParent200JSONResponse SimpleTreeParentRead
+type ReadItemParent200JSONResponse ItemParentRead
 
-func (response ReadSimpleTreeParent200JSONResponse) VisitReadSimpleTreeParentResponse(w http.ResponseWriter) error {
+func (response ReadItemParent200JSONResponse) VisitReadItemParentResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTreeParent400JSONResponse struct{ N400JSONResponse }
+type ReadItemParent400JSONResponse struct{ N400JSONResponse }
 
-func (response ReadSimpleTreeParent400JSONResponse) VisitReadSimpleTreeParentResponse(w http.ResponseWriter) error {
+func (response ReadItemParent400JSONResponse) VisitReadItemParentResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTreeParent404JSONResponse struct{ N404JSONResponse }
+type ReadItemParent404JSONResponse struct{ N404JSONResponse }
 
-func (response ReadSimpleTreeParent404JSONResponse) VisitReadSimpleTreeParentResponse(w http.ResponseWriter) error {
+func (response ReadItemParent404JSONResponse) VisitReadItemParentResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTreeParent409JSONResponse struct{ N409JSONResponse }
+type ReadItemParent409JSONResponse struct{ N409JSONResponse }
 
-func (response ReadSimpleTreeParent409JSONResponse) VisitReadSimpleTreeParentResponse(w http.ResponseWriter) error {
+func (response ReadItemParent409JSONResponse) VisitReadItemParentResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type ReadSimpleTreeParent500JSONResponse struct{ N500JSONResponse }
+type ReadItemParent500JSONResponse struct{ N500JSONResponse }
 
-func (response ReadSimpleTreeParent500JSONResponse) VisitReadSimpleTreeParentResponse(w http.ResponseWriter) error {
+func (response ReadItemParent500JSONResponse) VisitReadItemParentResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type RestoreSimpleTreeRequestObject struct {
+type RestoreItemRequestObject struct {
 	Id uint32 `json:"id"`
 }
 
-type RestoreSimpleTreeResponseObject interface {
-	VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error
+type RestoreItemResponseObject interface {
+	VisitRestoreItemResponse(w http.ResponseWriter) error
 }
 
-type RestoreSimpleTree204Response struct {
+type RestoreItem204Response struct {
 }
 
-func (response RestoreSimpleTree204Response) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
+func (response RestoreItem204Response) VisitRestoreItemResponse(w http.ResponseWriter) error {
 	w.WriteHeader(204)
 	return nil
 }
 
-type RestoreSimpleTree400JSONResponse struct{ N400JSONResponse }
+type RestoreItem400JSONResponse struct{ N400JSONResponse }
 
-func (response RestoreSimpleTree400JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
+func (response RestoreItem400JSONResponse) VisitRestoreItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type RestoreSimpleTree404JSONResponse struct{ N404JSONResponse }
+type RestoreItem404JSONResponse struct{ N404JSONResponse }
 
-func (response RestoreSimpleTree404JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
+func (response RestoreItem404JSONResponse) VisitRestoreItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type RestoreSimpleTree409JSONResponse struct{ N409JSONResponse }
+type RestoreItem409JSONResponse struct{ N409JSONResponse }
 
-func (response RestoreSimpleTree409JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
+func (response RestoreItem409JSONResponse) VisitRestoreItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type RestoreSimpleTree500JSONResponse struct{ N500JSONResponse }
+type RestoreItem500JSONResponse struct{ N500JSONResponse }
 
-func (response RestoreSimpleTree500JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
+func (response RestoreItem500JSONResponse) VisitRestoreItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
@@ -873,30 +873,30 @@ func (response RestoreSimpleTree500JSONResponse) VisitRestoreSimpleTreeResponse(
 
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
-	// List SimpleTrees
+	// List Items
 	// (GET /simple-tree)
-	ListSimpleTree(ctx context.Context, request ListSimpleTreeRequestObject) (ListSimpleTreeResponseObject, error)
-	// Create a new SimpleTree
+	ListItem(ctx context.Context, request ListItemRequestObject) (ListItemResponseObject, error)
+	// Create a new Item
 	// (POST /simple-tree)
-	CreateSimpleTree(ctx context.Context, request CreateSimpleTreeRequestObject) (CreateSimpleTreeResponseObject, error)
-	// Deletes a SimpleTree by ID
+	CreateItem(ctx context.Context, request CreateItemRequestObject) (CreateItemResponseObject, error)
+	// Deletes a Item by ID
 	// (DELETE /simple-tree/{id})
-	DeleteSimpleTree(ctx context.Context, request DeleteSimpleTreeRequestObject) (DeleteSimpleTreeResponseObject, error)
-	// Find a SimpleTree by ID
+	DeleteItem(ctx context.Context, request DeleteItemRequestObject) (DeleteItemResponseObject, error)
+	// Find a Item by ID
 	// (GET /simple-tree/{id})
-	ReadSimpleTree(ctx context.Context, request ReadSimpleTreeRequestObject) (ReadSimpleTreeResponseObject, error)
-	// Updates a SimpleTree
+	ReadItem(ctx context.Context, request ReadItemRequestObject) (ReadItemResponseObject, error)
+	// Updates a Item
 	// (PATCH /simple-tree/{id})
-	UpdateSimpleTree(ctx context.Context, request UpdateSimpleTreeRequestObject) (UpdateSimpleTreeResponseObject, error)
+	UpdateItem(ctx context.Context, request UpdateItemRequestObject) (UpdateItemResponseObject, error)
 	// List of subordinate items
 	// (GET /simple-tree/{id}/children)
-	ListSimpleTreeChildren(ctx context.Context, request ListSimpleTreeChildrenRequestObject) (ListSimpleTreeChildrenResponseObject, error)
-	// Find the attached SimpleTree
+	ListItemChildren(ctx context.Context, request ListItemChildrenRequestObject) (ListItemChildrenResponseObject, error)
+	// Find the attached Item
 	// (GET /simple-tree/{id}/parent)
-	ReadSimpleTreeParent(ctx context.Context, request ReadSimpleTreeParentRequestObject) (ReadSimpleTreeParentResponseObject, error)
+	ReadItemParent(ctx context.Context, request ReadItemParentRequestObject) (ReadItemParentResponseObject, error)
 	// Restore a trashed record
 	// (POST /simple-tree/{id}/restore)
-	RestoreSimpleTree(ctx context.Context, request RestoreSimpleTreeRequestObject) (RestoreSimpleTreeResponseObject, error)
+	RestoreItem(ctx context.Context, request RestoreItemRequestObject) (RestoreItemResponseObject, error)
 }
 
 type StrictHandlerFunc = strictgin.StrictGinHandlerFunc
@@ -911,25 +911,25 @@ type strictHandler struct {
 	middlewares []StrictMiddlewareFunc
 }
 
-// ListSimpleTree operation middleware
-func (sh *strictHandler) ListSimpleTree(ctx *gin.Context, params ListSimpleTreeParams) {
-	var request ListSimpleTreeRequestObject
+// ListItem operation middleware
+func (sh *strictHandler) ListItem(ctx *gin.Context, params ListItemParams) {
+	var request ListItemRequestObject
 
 	request.Params = params
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.ListSimpleTree(ctx, request.(ListSimpleTreeRequestObject))
+		return sh.ssi.ListItem(ctx, request.(ListItemRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "ListSimpleTree")
+		handler = middleware(handler, "ListItem")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(ListSimpleTreeResponseObject); ok {
-		if err := validResponse.VisitListSimpleTreeResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(ListItemResponseObject); ok {
+		if err := validResponse.VisitListItemResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {
@@ -937,11 +937,11 @@ func (sh *strictHandler) ListSimpleTree(ctx *gin.Context, params ListSimpleTreeP
 	}
 }
 
-// CreateSimpleTree operation middleware
-func (sh *strictHandler) CreateSimpleTree(ctx *gin.Context) {
-	var request CreateSimpleTreeRequestObject
+// CreateItem operation middleware
+func (sh *strictHandler) CreateItem(ctx *gin.Context) {
+	var request CreateItemRequestObject
 
-	var body CreateSimpleTreeJSONRequestBody
+	var body CreateItemJSONRequestBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.Status(http.StatusBadRequest)
 		ctx.Error(err)
@@ -950,18 +950,18 @@ func (sh *strictHandler) CreateSimpleTree(ctx *gin.Context) {
 	request.Body = &body
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.CreateSimpleTree(ctx, request.(CreateSimpleTreeRequestObject))
+		return sh.ssi.CreateItem(ctx, request.(CreateItemRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "CreateSimpleTree")
+		handler = middleware(handler, "CreateItem")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(CreateSimpleTreeResponseObject); ok {
-		if err := validResponse.VisitCreateSimpleTreeResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(CreateItemResponseObject); ok {
+		if err := validResponse.VisitCreateItemResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {
@@ -969,26 +969,26 @@ func (sh *strictHandler) CreateSimpleTree(ctx *gin.Context) {
 	}
 }
 
-// DeleteSimpleTree operation middleware
-func (sh *strictHandler) DeleteSimpleTree(ctx *gin.Context, id uint32, params DeleteSimpleTreeParams) {
-	var request DeleteSimpleTreeRequestObject
+// DeleteItem operation middleware
+func (sh *strictHandler) DeleteItem(ctx *gin.Context, id uint32, params DeleteItemParams) {
+	var request DeleteItemRequestObject
 
 	request.Id = id
 	request.Params = params
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.DeleteSimpleTree(ctx, request.(DeleteSimpleTreeRequestObject))
+		return sh.ssi.DeleteItem(ctx, request.(DeleteItemRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "DeleteSimpleTree")
+		handler = middleware(handler, "DeleteItem")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(DeleteSimpleTreeResponseObject); ok {
-		if err := validResponse.VisitDeleteSimpleTreeResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(DeleteItemResponseObject); ok {
+		if err := validResponse.VisitDeleteItemResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {
@@ -996,26 +996,26 @@ func (sh *strictHandler) DeleteSimpleTree(ctx *gin.Context, id uint32, params De
 	}
 }
 
-// ReadSimpleTree operation middleware
-func (sh *strictHandler) ReadSimpleTree(ctx *gin.Context, id uint32, params ReadSimpleTreeParams) {
-	var request ReadSimpleTreeRequestObject
+// ReadItem operation middleware
+func (sh *strictHandler) ReadItem(ctx *gin.Context, id uint32, params ReadItemParams) {
+	var request ReadItemRequestObject
 
 	request.Id = id
 	request.Params = params
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.ReadSimpleTree(ctx, request.(ReadSimpleTreeRequestObject))
+		return sh.ssi.ReadItem(ctx, request.(ReadItemRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "ReadSimpleTree")
+		handler = middleware(handler, "ReadItem")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(ReadSimpleTreeResponseObject); ok {
-		if err := validResponse.VisitReadSimpleTreeResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(ReadItemResponseObject); ok {
+		if err := validResponse.VisitReadItemResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {
@@ -1023,13 +1023,13 @@ func (sh *strictHandler) ReadSimpleTree(ctx *gin.Context, id uint32, params Read
 	}
 }
 
-// UpdateSimpleTree operation middleware
-func (sh *strictHandler) UpdateSimpleTree(ctx *gin.Context, id uint32) {
-	var request UpdateSimpleTreeRequestObject
+// UpdateItem operation middleware
+func (sh *strictHandler) UpdateItem(ctx *gin.Context, id uint32) {
+	var request UpdateItemRequestObject
 
 	request.Id = id
 
-	var body UpdateSimpleTreeJSONRequestBody
+	var body UpdateItemJSONRequestBody
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		ctx.Status(http.StatusBadRequest)
 		ctx.Error(err)
@@ -1038,18 +1038,18 @@ func (sh *strictHandler) UpdateSimpleTree(ctx *gin.Context, id uint32) {
 	request.Body = &body
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.UpdateSimpleTree(ctx, request.(UpdateSimpleTreeRequestObject))
+		return sh.ssi.UpdateItem(ctx, request.(UpdateItemRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "UpdateSimpleTree")
+		handler = middleware(handler, "UpdateItem")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(UpdateSimpleTreeResponseObject); ok {
-		if err := validResponse.VisitUpdateSimpleTreeResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(UpdateItemResponseObject); ok {
+		if err := validResponse.VisitUpdateItemResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {
@@ -1057,26 +1057,26 @@ func (sh *strictHandler) UpdateSimpleTree(ctx *gin.Context, id uint32) {
 	}
 }
 
-// ListSimpleTreeChildren operation middleware
-func (sh *strictHandler) ListSimpleTreeChildren(ctx *gin.Context, id uint32, params ListSimpleTreeChildrenParams) {
-	var request ListSimpleTreeChildrenRequestObject
+// ListItemChildren operation middleware
+func (sh *strictHandler) ListItemChildren(ctx *gin.Context, id uint32, params ListItemChildrenParams) {
+	var request ListItemChildrenRequestObject
 
 	request.Id = id
 	request.Params = params
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.ListSimpleTreeChildren(ctx, request.(ListSimpleTreeChildrenRequestObject))
+		return sh.ssi.ListItemChildren(ctx, request.(ListItemChildrenRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "ListSimpleTreeChildren")
+		handler = middleware(handler, "ListItemChildren")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(ListSimpleTreeChildrenResponseObject); ok {
-		if err := validResponse.VisitListSimpleTreeChildrenResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(ListItemChildrenResponseObject); ok {
+		if err := validResponse.VisitListItemChildrenResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {
@@ -1084,25 +1084,25 @@ func (sh *strictHandler) ListSimpleTreeChildren(ctx *gin.Context, id uint32, par
 	}
 }
 
-// ReadSimpleTreeParent operation middleware
-func (sh *strictHandler) ReadSimpleTreeParent(ctx *gin.Context, id uint32) {
-	var request ReadSimpleTreeParentRequestObject
+// ReadItemParent operation middleware
+func (sh *strictHandler) ReadItemParent(ctx *gin.Context, id uint32) {
+	var request ReadItemParentRequestObject
 
 	request.Id = id
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.ReadSimpleTreeParent(ctx, request.(ReadSimpleTreeParentRequestObject))
+		return sh.ssi.ReadItemParent(ctx, request.(ReadItemParentRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "ReadSimpleTreeParent")
+		handler = middleware(handler, "ReadItemParent")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(ReadSimpleTreeParentResponseObject); ok {
-		if err := validResponse.VisitReadSimpleTreeParentResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(ReadItemParentResponseObject); ok {
+		if err := validResponse.VisitReadItemParentResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {
@@ -1110,25 +1110,25 @@ func (sh *strictHandler) ReadSimpleTreeParent(ctx *gin.Context, id uint32) {
 	}
 }
 
-// RestoreSimpleTree operation middleware
-func (sh *strictHandler) RestoreSimpleTree(ctx *gin.Context, id uint32) {
-	var request RestoreSimpleTreeRequestObject
+// RestoreItem operation middleware
+func (sh *strictHandler) RestoreItem(ctx *gin.Context, id uint32) {
+	var request RestoreItemRequestObject
 
 	request.Id = id
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.RestoreSimpleTree(ctx, request.(RestoreSimpleTreeRequestObject))
+		return sh.ssi.RestoreItem(ctx, request.(RestoreItemRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "RestoreSimpleTree")
+		handler = middleware(handler, "RestoreItem")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(RestoreSimpleTreeResponseObject); ok {
-		if err := validResponse.VisitRestoreSimpleTreeResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(RestoreItemResponseObject); ok {
+		if err := validResponse.VisitRestoreItemResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {

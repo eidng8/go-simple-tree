@@ -9,19 +9,19 @@ import (
 	"github.com/eidng8/go-simple-tree/ent"
 )
 
-type UpdateSimpleTree201JSONResponse SimpleTreeCreate
+type UpdateItem201JSONResponse ItemCreate
 
-func (response UpdateSimpleTree201JSONResponse) VisitUpdateSimpleTreeResponse(w http.ResponseWriter) error {
+func (response UpdateItem201JSONResponse) VisitUpdateItemResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(201)
 	return json.NewEncoder(w).Encode(response)
 }
 
-// UpdateSimpleTree Updates a SimpleTree
+// UpdateItem Updates a Item
 // (PATCH /simple-tree/{id})
-func (s Server) UpdateSimpleTree(
-	ctx context.Context, request UpdateSimpleTreeRequestObject,
-) (UpdateSimpleTreeResponseObject, error) {
+func (s Server) UpdateItem(
+	ctx context.Context, request UpdateItemRequestObject,
+) (UpdateItemResponseObject, error) {
 	tx, err := s.EC.Tx(ctx)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (s Server) UpdateSimpleTree(
 			_ = tx.Rollback()
 		}
 	}()
-	ac := tx.SimpleTree.UpdateOneID(request.Id)
+	ac := tx.Item.UpdateOneID(request.Id)
 	if request.Body.Name != nil {
 		ac.SetName(*request.Body.Name)
 	}
@@ -43,7 +43,7 @@ func (s Server) UpdateSimpleTree(
 		}
 		ac.SetParentID(*request.Body.ParentId)
 	}
-	var aa *ent.SimpleTree
+	var aa *ent.Item
 	aa, err = ac.Save(ctx)
 	if err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func (s Server) UpdateSimpleTree(
 		val := *aa.ParentID
 		pid = &val
 	}
-	return UpdateSimpleTree201JSONResponse{
+	return UpdateItem201JSONResponse{
 		Id:        aa.ID,
 		ParentId:  pid,
 		Name:      aa.Name,

@@ -9,11 +9,11 @@
     "/simple-tree": {
       "get": {
         "tags": [
-          "SimpleTree"
+          "Item"
         ],
-        "summary": "List SimpleTrees",
-        "description": "List SimpleTrees.",
-        "operationId": "listSimpleTree",
+        "summary": "List Items",
+        "description": "List Items.",
+        "operationId": "listItem",
         "parameters": [
           {
             "name": "page",
@@ -115,7 +115,7 @@
                       "description": "List of items",
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/SimpleTreeList"
+                        "$ref": "#/components/schemas/ItemList"
                       }
                     }
                   },
@@ -153,13 +153,13 @@
       },
       "post": {
         "tags": [
-          "SimpleTree"
+          "Item"
         ],
-        "summary": "Create a new SimpleTree",
-        "description": "Creates a new SimpleTree and persists it to storage.",
-        "operationId": "createSimpleTree",
+        "summary": "Create a new Item",
+        "description": "Creates a new Item and persists it to storage.",
+        "operationId": "createItem",
         "requestBody": {
-          "description": "SimpleTree to create",
+          "description": "Item to create",
           "content": {
             "application/json": {
               "schema": {
@@ -190,11 +190,11 @@
         },
         "responses": {
           "200": {
-            "description": "SimpleTree created",
+            "description": "Item created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SimpleTreeCreate"
+                  "$ref": "#/components/schemas/ItemCreate"
                 }
               }
             }
@@ -214,16 +214,16 @@
     "/simple-tree/{id}": {
       "get": {
         "tags": [
-          "SimpleTree"
+          "Item"
         ],
-        "summary": "Find a SimpleTree by ID",
-        "description": "Finds the SimpleTree with the requested ID and returns it.",
-        "operationId": "readSimpleTree",
+        "summary": "Find a Item by ID",
+        "description": "Finds the Item with the requested ID and returns it.",
+        "operationId": "readItem",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the SimpleTree",
+            "description": "ID of the Item",
             "required": true,
             "schema": {
               "type": "integer",
@@ -243,11 +243,11 @@
         ],
         "responses": {
           "200": {
-            "description": "SimpleTree with requested ID was found",
+            "description": "Item with requested ID was found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SimpleTreeRead"
+                  "$ref": "#/components/schemas/ItemRead"
                 }
               }
             }
@@ -268,16 +268,16 @@
       },
       "delete": {
         "tags": [
-          "SimpleTree"
+          "Item"
         ],
-        "summary": "Deletes a SimpleTree by ID",
-        "description": "Deletes the SimpleTree with the requested ID.",
-        "operationId": "deleteSimpleTree",
+        "summary": "Deletes a Item by ID",
+        "description": "Deletes the Item with the requested ID.",
+        "operationId": "deleteItem",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the SimpleTree",
+            "description": "ID of the Item",
             "required": true,
             "schema": {
               "type": "integer",
@@ -297,7 +297,7 @@
         ],
         "responses": {
           "204": {
-            "description": "SimpleTree with requested ID was deleted"
+            "description": "Item with requested ID was deleted"
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -315,16 +315,16 @@
       },
       "patch": {
         "tags": [
-          "SimpleTree"
+          "Item"
         ],
-        "summary": "Updates a SimpleTree",
-        "description": "Updates a SimpleTree and persists changes to storage.",
-        "operationId": "updateSimpleTree",
+        "summary": "Updates a Item",
+        "description": "Updates a Item and persists changes to storage.",
+        "operationId": "updateItem",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the SimpleTree",
+            "description": "ID of the Item",
             "required": true,
             "schema": {
               "type": "integer",
@@ -335,7 +335,7 @@
           }
         ],
         "requestBody": {
-          "description": "SimpleTree properties to update",
+          "description": "Item properties to update",
           "content": {
             "application/json": {
               "schema": {
@@ -363,11 +363,11 @@
         },
         "responses": {
           "200": {
-            "description": "SimpleTree updated",
+            "description": "Item updated",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SimpleTreeUpdate"
+                  "$ref": "#/components/schemas/ItemUpdate"
                 }
               }
             }
@@ -390,16 +390,16 @@
     "/simple-tree/{id}/children": {
       "get": {
         "tags": [
-          "SimpleTree"
+          "Item"
         ],
         "summary": "List of subordinate items",
         "description": "List attached Childrens.",
-        "operationId": "listSimpleTreeChildren",
+        "operationId": "listItemChildren",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the SimpleTree",
+            "description": "ID of the Item",
             "required": true,
             "schema": {
               "type": "integer",
@@ -505,7 +505,7 @@
                       "description": "List of items",
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/SimpleTreeList"
+                        "$ref": "#/components/schemas/ItemList"
                       }
                     }
                   },
@@ -545,16 +545,16 @@
     "/simple-tree/{id}/parent": {
       "get": {
         "tags": [
-          "SimpleTree"
+          "Item"
         ],
-        "summary": "Find the attached SimpleTree",
-        "description": "Find the attached SimpleTree of the SimpleTree with the given ID",
-        "operationId": "readSimpleTreeParent",
+        "summary": "Find the attached Item",
+        "description": "Find the attached Item of the Item with the given ID",
+        "operationId": "readItemParent",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the SimpleTree",
+            "description": "ID of the Item",
             "required": true,
             "schema": {
               "type": "integer",
@@ -566,11 +566,11 @@
         ],
         "responses": {
           "200": {
-            "description": "SimpleTree attached to SimpleTree with requested ID was found",
+            "description": "Item attached to Item with requested ID was found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SimpleTree_ParentRead"
+                  "$ref": "#/components/schemas/Item_ParentRead"
                 }
               }
             }
@@ -594,12 +594,12 @@
       "post": {
         "summary": "Restore a trashed record",
         "description": "Restore a record that was previously soft deleted",
-        "operationId": "RestoreSimpleTree",
+        "operationId": "RestoreItem",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of the SimpleTree",
+            "description": "ID of the Item",
             "required": true,
             "schema": {
               "type": "integer",
@@ -631,7 +631,7 @@
   },
   "components": {
     "schemas": {
-      "SimpleTree": {
+      "Item": {
         "type": "object",
         "properties": {
           "id": {
@@ -662,12 +662,12 @@
             "format": "date-time"
           },
           "parent": {
-            "$ref": "#/components/schemas/SimpleTree"
+            "$ref": "#/components/schemas/Item"
           },
           "children": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/SimpleTree"
+              "$ref": "#/components/schemas/Item"
             }
           }
         },
@@ -676,7 +676,7 @@
           "name"
         ]
       },
-      "SimpleTreeCreate": {
+      "ItemCreate": {
         "type": "object",
         "properties": {
           "id": {
@@ -712,7 +712,7 @@
           "name"
         ]
       },
-      "SimpleTreeList": {
+      "ItemList": {
         "type": "object",
         "properties": {
           "id": {
@@ -748,7 +748,7 @@
           "name"
         ]
       },
-      "SimpleTreeRead": {
+      "ItemRead": {
         "type": "object",
         "properties": {
           "id": {
@@ -790,7 +790,7 @@
           "name"
         ]
       },
-      "SimpleTreeUpdate": {
+      "ItemUpdate": {
         "type": "object",
         "properties": {
           "id": {
@@ -826,7 +826,7 @@
           "name"
         ]
       },
-      "SimpleTree_ChildrenList": {
+      "Item_ChildrenList": {
         "type": "object",
         "properties": {
           "id": {
@@ -862,7 +862,7 @@
           "name"
         ]
       },
-      "SimpleTree_ParentRead": {
+      "Item_ParentRead": {
         "type": "object",
         "properties": {
           "id": {

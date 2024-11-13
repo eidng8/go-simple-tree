@@ -8,23 +8,23 @@ import (
 	"github.com/oapi-codegen/nullable"
 )
 
-// SimpleTree defines model for SimpleTree.
-type SimpleTree struct {
-	Children  *[]SimpleTree `json:"children,omitempty" yaml:"children,omitempty" xml:"children,omitempty" bson:"children,omitempty"`
-	CreatedAt *time.Time    `json:"created_at,omitempty" yaml:"created_at,omitempty" xml:"created_at,omitempty" bson:"created_at,omitempty"`
-	Id        uint32        `json:"id" yaml:"id" xml:"id" bson:"id"`
+// Item defines model for Item.
+type Item struct {
+	Children  *[]Item    `json:"children,omitempty" yaml:"children,omitempty" xml:"children,omitempty" bson:"children,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty" yaml:"created_at,omitempty" xml:"created_at,omitempty" bson:"created_at,omitempty"`
+	Id        uint32     `json:"id" yaml:"id" xml:"id" bson:"id"`
 
 	// Name Item name
-	Name   string      `json:"name" yaml:"name" xml:"name" bson:"name"`
-	Parent *SimpleTree `json:"parent,omitempty" yaml:"parent,omitempty" xml:"parent,omitempty" bson:"parent,omitempty"`
+	Name   string `json:"name" yaml:"name" xml:"name" bson:"name"`
+	Parent *Item  `json:"parent,omitempty" yaml:"parent,omitempty" xml:"parent,omitempty" bson:"parent,omitempty"`
 
 	// ParentId Parent record ID
 	ParentId  *uint32    `json:"parent_id,omitempty" yaml:"parent_id,omitempty" xml:"parent_id,omitempty" bson:"parent_id,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty" yaml:"updated_at,omitempty" xml:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }
 
-// SimpleTreeCreate defines model for SimpleTreeCreate.
-type SimpleTreeCreate struct {
+// ItemCreate defines model for ItemCreate.
+type ItemCreate struct {
 	CreatedAt *time.Time `json:"created_at,omitempty" yaml:"created_at,omitempty" xml:"created_at,omitempty" bson:"created_at,omitempty"`
 	Id        uint32     `json:"id" yaml:"id" xml:"id" bson:"id"`
 
@@ -36,8 +36,8 @@ type SimpleTreeCreate struct {
 	UpdatedAt *time.Time `json:"updated_at,omitempty" yaml:"updated_at,omitempty" xml:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }
 
-// SimpleTreeList defines model for SimpleTreeList.
-type SimpleTreeList struct {
+// ItemList defines model for ItemList.
+type ItemList struct {
 	CreatedAt *time.Time `json:"created_at,omitempty" yaml:"created_at,omitempty" xml:"created_at,omitempty" bson:"created_at,omitempty"`
 	Id        uint32     `json:"id" yaml:"id" xml:"id" bson:"id"`
 
@@ -49,8 +49,8 @@ type SimpleTreeList struct {
 	UpdatedAt *time.Time `json:"updated_at,omitempty" yaml:"updated_at,omitempty" xml:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }
 
-// SimpleTreeRead defines model for SimpleTreeRead.
-type SimpleTreeRead struct {
+// ItemRead defines model for ItemRead.
+type ItemRead struct {
 	CreatedAt *time.Time `json:"created_at,omitempty" yaml:"created_at,omitempty" xml:"created_at,omitempty" bson:"created_at,omitempty"`
 
 	// DeletedAt Date and time when the record was deleted
@@ -65,8 +65,8 @@ type SimpleTreeRead struct {
 	UpdatedAt *time.Time `json:"updated_at,omitempty" yaml:"updated_at,omitempty" xml:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }
 
-// SimpleTreeUpdate defines model for SimpleTreeUpdate.
-type SimpleTreeUpdate struct {
+// ItemUpdate defines model for ItemUpdate.
+type ItemUpdate struct {
 	CreatedAt *time.Time `json:"created_at,omitempty" yaml:"created_at,omitempty" xml:"created_at,omitempty" bson:"created_at,omitempty"`
 	Id        uint32     `json:"id" yaml:"id" xml:"id" bson:"id"`
 
@@ -78,8 +78,8 @@ type SimpleTreeUpdate struct {
 	UpdatedAt *time.Time `json:"updated_at,omitempty" yaml:"updated_at,omitempty" xml:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }
 
-// SimpleTreeParentRead defines model for SimpleTree_ParentRead.
-type SimpleTreeParentRead struct {
+// ItemParentRead defines model for Item_ParentRead.
+type ItemParentRead struct {
 	CreatedAt *time.Time `json:"created_at,omitempty" yaml:"created_at,omitempty" xml:"created_at,omitempty" bson:"created_at,omitempty"`
 	Id        uint32     `json:"id" yaml:"id" xml:"id" bson:"id"`
 
@@ -119,8 +119,8 @@ type N500 struct {
 	Status string       `json:"status" yaml:"status" xml:"status" bson:"status"`
 }
 
-// ListSimpleTreeParams defines parameters for ListSimpleTree.
-type ListSimpleTreeParams struct {
+// ListItemParams defines parameters for ListItem.
+type ListItemParams struct {
 	// Page what page to render
 	Page *int `form:"page,omitempty" json:"page,omitempty" yaml:"page,omitempty" xml:"page,omitempty" bson:"page,omitempty"`
 
@@ -134,8 +134,8 @@ type ListSimpleTreeParams struct {
 	Trashed *bool `form:"trashed,omitempty" json:"trashed,omitempty" yaml:"trashed,omitempty" xml:"trashed,omitempty" bson:"trashed,omitempty"`
 }
 
-// CreateSimpleTreeJSONBody defines parameters for CreateSimpleTree.
-type CreateSimpleTreeJSONBody struct {
+// CreateItemJSONBody defines parameters for CreateItem.
+type CreateItemJSONBody struct {
 	// Name Item name
 	Name string `json:"name" yaml:"name" xml:"name" bson:"name"`
 
@@ -143,20 +143,20 @@ type CreateSimpleTreeJSONBody struct {
 	ParentId *uint32 `json:"parent_id,omitempty" yaml:"parent_id,omitempty" xml:"parent_id,omitempty" bson:"parent_id,omitempty"`
 }
 
-// DeleteSimpleTreeParams defines parameters for DeleteSimpleTree.
-type DeleteSimpleTreeParams struct {
+// DeleteItemParams defines parameters for DeleteItem.
+type DeleteItemParams struct {
 	// Trashed Whether to include trashed items
 	Trashed *bool `form:"trashed,omitempty" json:"trashed,omitempty" yaml:"trashed,omitempty" xml:"trashed,omitempty" bson:"trashed,omitempty"`
 }
 
-// ReadSimpleTreeParams defines parameters for ReadSimpleTree.
-type ReadSimpleTreeParams struct {
+// ReadItemParams defines parameters for ReadItem.
+type ReadItemParams struct {
 	// Trashed Whether to include trashed items
 	Trashed *bool `form:"trashed,omitempty" json:"trashed,omitempty" yaml:"trashed,omitempty" xml:"trashed,omitempty" bson:"trashed,omitempty"`
 }
 
-// UpdateSimpleTreeJSONBody defines parameters for UpdateSimpleTree.
-type UpdateSimpleTreeJSONBody struct {
+// UpdateItemJSONBody defines parameters for UpdateItem.
+type UpdateItemJSONBody struct {
 	// Name Item name
 	Name *string `json:"name,omitempty" yaml:"name,omitempty" xml:"name,omitempty" bson:"name,omitempty"`
 
@@ -164,8 +164,8 @@ type UpdateSimpleTreeJSONBody struct {
 	ParentId *uint32 `json:"parent_id,omitempty" yaml:"parent_id,omitempty" xml:"parent_id,omitempty" bson:"parent_id,omitempty"`
 }
 
-// ListSimpleTreeChildrenParams defines parameters for ListSimpleTreeChildren.
-type ListSimpleTreeChildrenParams struct {
+// ListItemChildrenParams defines parameters for ListItemChildren.
+type ListItemChildrenParams struct {
 	// Page what page to render
 	Page *int `form:"page,omitempty" json:"page,omitempty" yaml:"page,omitempty" xml:"page,omitempty" bson:"page,omitempty"`
 
@@ -179,8 +179,8 @@ type ListSimpleTreeChildrenParams struct {
 	Recurse *bool `form:"recurse,omitempty" json:"recurse,omitempty" yaml:"recurse,omitempty" xml:"recurse,omitempty" bson:"recurse,omitempty"`
 }
 
-// CreateSimpleTreeJSONRequestBody defines body for CreateSimpleTree for application/json ContentType.
-type CreateSimpleTreeJSONRequestBody CreateSimpleTreeJSONBody
+// CreateItemJSONRequestBody defines body for CreateItem for application/json ContentType.
+type CreateItemJSONRequestBody CreateItemJSONBody
 
-// UpdateSimpleTreeJSONRequestBody defines body for UpdateSimpleTree for application/json ContentType.
-type UpdateSimpleTreeJSONRequestBody UpdateSimpleTreeJSONBody
+// UpdateItemJSONRequestBody defines body for UpdateItem for application/json ContentType.
+type UpdateItemJSONRequestBody UpdateItemJSONBody

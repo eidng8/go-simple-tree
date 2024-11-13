@@ -6,8 +6,8 @@ import (
 	"github.com/eidng8/go-simple-tree/ent"
 )
 
-func newSimpleTreeFromEnt(eaa *ent.SimpleTree) *SimpleTree {
-	aa := SimpleTree{}
+func newItemFromEnt(eaa *ent.Item) *Item {
+	aa := Item{}
 	aa.Id = eaa.ID
 	aa.Name = eaa.Name
 	if eaa.ParentID != nil {
@@ -17,20 +17,20 @@ func newSimpleTreeFromEnt(eaa *ent.SimpleTree) *SimpleTree {
 	aa.CreatedAt = eaa.CreatedAt
 	aa.UpdatedAt = eaa.UpdatedAt
 	if eaa.Edges.Parent != nil {
-		aa.Parent = newSimpleTreeFromEnt(eaa.Edges.Parent)
+		aa.Parent = newItemFromEnt(eaa.Edges.Parent)
 	}
 	if eaa.Edges.Children != nil {
-		children := make([]SimpleTree, len(eaa.Edges.Children))
+		children := make([]Item, len(eaa.Edges.Children))
 		for i, child := range eaa.Edges.Children {
-			children[i] = *newSimpleTreeFromEnt(child)
+			children[i] = *newItemFromEnt(child)
 		}
 		aa.Children = &children
 	}
 	return &aa
 }
 
-func newSimpleTreeListFromEnt(eaa *ent.SimpleTree) SimpleTreeList {
-	aa := SimpleTreeList{}
+func newItemListFromEnt(eaa *ent.Item) ItemList {
+	aa := ItemList{}
 	aa.Id = eaa.ID
 	aa.Name = eaa.Name
 	if eaa.ParentID != nil {
@@ -42,16 +42,16 @@ func newSimpleTreeListFromEnt(eaa *ent.SimpleTree) SimpleTreeList {
 	return aa
 }
 
-func mapSimpleTreeListFromEnt(array []*ent.SimpleTree) []SimpleTreeList {
-	data := make([]SimpleTreeList, len(array))
+func mapItemListFromEnt(array []*ent.Item) []ItemList {
+	data := make([]ItemList, len(array))
 	for i, row := range array {
-		data[i] = newSimpleTreeListFromEnt(row)
+		data[i] = newItemListFromEnt(row)
 	}
 	return data
 }
 
-func mapPage[T ListSimpleTree200JSONResponse | ListSimpleTreeChildren200JSONResponse](
-	page *paginate.PaginatedList[ent.SimpleTree],
+func mapPage[T ListItem200JSONResponse | ListItemChildren200JSONResponse](
+	page *paginate.PaginatedList[ent.Item],
 ) T {
 	return T{
 		CurrentPage:  page.CurrentPage,
@@ -65,6 +65,6 @@ func mapPage[T ListSimpleTree200JSONResponse | ListSimpleTreeChildren200JSONResp
 		PrevPageUrl:  page.PrevPageUrl,
 		To:           page.To,
 		Total:        page.Total,
-		Data:         mapSimpleTreeListFromEnt(page.Data),
+		Data:         mapItemListFromEnt(page.Data),
 	}
 }

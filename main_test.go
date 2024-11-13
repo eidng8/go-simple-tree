@@ -42,6 +42,6 @@ func setupGinTest(tb testing.TB) (
 func fixture(client *ent.Client) {
 	ctx := context.Background()
 	for i := range 50 {
-		client.SimpleTree.Create().SetName(fmt.Sprintf("name %d", i)).SaveX(ctx)
+		client.Item.Create().SetName(fmt.Sprintf("name %d", i)).SaveX(ctx)
 	}
 }

@@ -11,19 +11,19 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/eidng8/go-simple-tree/ent/item"
 	"github.com/eidng8/go-simple-tree/ent/schema"
-	"github.com/eidng8/go-simple-tree/ent/simpletree"
 )
 
-func Test_ListSimpleTree_should_return_1st_page(t *testing.T) {
+func Test_ListItem_should_return_1st_page(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).Limit(10).
+	rows := entClient.Item.Query().Order(item.ByID()).Limit(10).
 		AllX(context.Background())
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        50,
 		PerPage:      10,
 		CurrentPage:  1,
@@ -49,15 +49,15 @@ func Test_ListSimpleTree_should_return_1st_page(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_4th_page(t *testing.T) {
+func Test_ListItem_should_return_4th_page(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).Limit(10).
+	rows := entClient.Item.Query().Order(item.ByID()).Limit(10).
 		Offset(30).AllX(context.Background())
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        50,
 		PerPage:      10,
 		CurrentPage:  4,
@@ -83,15 +83,15 @@ func Test_ListSimpleTree_should_return_4th_page(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_all_records(t *testing.T) {
+func Test_ListItem_should_return_all_records(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).
+	rows := entClient.Item.Query().Order(item.ByID()).
 		AllX(context.Background())
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        50,
 		PerPage:      12345,
 		CurrentPage:  1,
@@ -118,19 +118,19 @@ func Test_ListSimpleTree_should_return_all_records(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_2nd_page_exclude_deleted(t *testing.T) {
+func Test_ListItem_should_return_2nd_page_exclude_deleted(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	entClient.SimpleTree.Delete().
-		Where(simpletree.Or(simpletree.IDIn(5, 3, 21))).
+	entClient.Item.Delete().
+		Where(item.Or(item.IDIn(5, 3, 21))).
 		ExecX(context.Background())
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).
-		Where(simpletree.And(simpletree.IDNotIn(5, 3, 21))).
+	rows := entClient.Item.Query().Order(item.ByID()).
+		Where(item.And(item.IDNotIn(5, 3, 21))).
 		Offset(10).Limit(10).AllX(context.Background())
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        47,
 		PerPage:      10,
 		CurrentPage:  2,
@@ -156,20 +156,20 @@ func Test_ListSimpleTree_should_return_2nd_page_exclude_deleted(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_2nd_page_include_deleted(t *testing.T) {
+func Test_ListItem_should_return_2nd_page_include_deleted(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	entClient.SimpleTree.Delete().
-		Where(simpletree.IDIn(5, 3, 11)).
+	entClient.Item.Delete().
+		Where(item.IDIn(5, 3, 11)).
 		ExecX(context.Background())
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).
-		Where(simpletree.IDLTE(20)).
+	rows := entClient.Item.Query().Order(item.ByID()).
+		Where(item.IDLTE(20)).
 		Offset(10).Limit(10).
 		AllX(softdelete.IncludeTrashed(context.Background()))
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        50,
 		PerPage:      10,
 		CurrentPage:  2,
@@ -196,19 +196,19 @@ func Test_ListSimpleTree_should_return_2nd_page_include_deleted(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_all_records_exclude_deleted(t *testing.T) {
+func Test_ListItem_should_return_all_records_exclude_deleted(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	entClient.SimpleTree.Delete().
-		Where(simpletree.IDIn(5, 3, 21)).
+	entClient.Item.Delete().
+		Where(item.IDIn(5, 3, 21)).
 		ExecX(context.Background())
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).
-		Where(simpletree.IDNotIn(5, 3, 21)).
+	rows := entClient.Item.Query().Order(item.ByID()).
+		Where(item.IDNotIn(5, 3, 21)).
 		AllX(context.Background())
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        47,
 		PerPage:      12345,
 		CurrentPage:  1,
@@ -235,16 +235,16 @@ func Test_ListSimpleTree_should_return_all_records_exclude_deleted(t *testing.T)
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_4th_page_5_per_page(t *testing.T) {
+func Test_ListItem_should_return_4th_page_5_per_page(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).Limit(5).
+	rows := entClient.Item.Query().Order(item.ByID()).Limit(5).
 		Offset(15).AllX(context.Background())
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
 	last := 10
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        50,
 		PerPage:      5,
 		CurrentPage:  4,
@@ -271,16 +271,16 @@ func Test_ListSimpleTree_should_return_4th_page_5_per_page(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_specified_name_prefix(t *testing.T) {
+func Test_ListItem_should_return_specified_name_prefix(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).
-		Where(simpletree.NameHasPrefix("name 1")).Limit(10).
+	rows := entClient.Item.Query().Order(item.ByID()).
+		Where(item.NameHasPrefix("name 1")).Limit(10).
 		AllX(context.Background())
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        11,
 		PerPage:      10,
 		CurrentPage:  1,
@@ -306,17 +306,17 @@ func Test_ListSimpleTree_should_return_specified_name_prefix(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_apply_all_filter(t *testing.T) {
+func Test_ListItem_should_apply_all_filter(t *testing.T) {
 	engine, entClient, res := setupGinTest(t)
-	entClient.SimpleTree.DeleteOneID(1).ExecX(context.Background())
-	rows := entClient.SimpleTree.Query().Order(simpletree.ByID()).Limit(10).
-		Where(simpletree.NameHasPrefix("name 1")).
+	entClient.Item.DeleteOneID(1).ExecX(context.Background())
+	rows := entClient.Item.Query().Order(item.ByID()).Limit(10).
+		Where(item.NameHasPrefix("name 1")).
 		AllX(softdelete.IncludeTrashed(context.Background()))
-	list := make([]*SimpleTree, len(rows))
+	list := make([]*Item, len(rows))
 	for i, row := range rows {
-		list[i] = newSimpleTreeFromEnt(row)
+		list[i] = newItemFromEnt(row)
 	}
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        11,
 		PerPage:      10,
 		CurrentPage:  1,
@@ -343,9 +343,9 @@ func Test_ListSimpleTree_should_apply_all_filter(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_return_no_record(t *testing.T) {
+func Test_ListItem_should_return_no_record(t *testing.T) {
 	engine, _, res := setupGinTest(t)
-	page := paginate.PaginatedList[SimpleTree]{
+	page := paginate.PaginatedList[Item]{
 		Total:        0,
 		PerPage:      10,
 		CurrentPage:  1,
@@ -357,7 +357,7 @@ func Test_ListSimpleTree_should_return_no_record(t *testing.T) {
 		Path:         "http://127.0.0.1" + schema.BaseUri,
 		From:         0,
 		To:           0,
-		Data:         []*SimpleTree{},
+		Data:         []*Item{},
 	}
 	bytes, err := jsoniter.Marshal(page)
 	assert.Nil(t, err)
@@ -372,14 +372,14 @@ func Test_ListSimpleTree_should_return_no_record(t *testing.T) {
 	require.JSONEq(t, expected, actual)
 }
 
-func Test_ListSimpleTree_should_report_400_for_invalid_page(t *testing.T) {
+func Test_ListItem_should_report_400_for_invalid_page(t *testing.T) {
 	engine, _, res := setupGinTest(t)
 	req, _ := http.NewRequest(http.MethodGet, schema.BaseUri+"?page=a", nil)
 	engine.ServeHTTP(res, req)
 	assert.Equal(t, http.StatusBadRequest, res.Code)
 }
 
-func Test_ListSimpleTree_should_report_400_for_invalid_perPage(t *testing.T) {
+func Test_ListItem_should_report_400_for_invalid_perPage(t *testing.T) {
 	engine, _, res := setupGinTest(t)
 	req, _ := http.NewRequest(http.MethodGet, schema.BaseUri+"?per_page=a", nil)
 	engine.ServeHTTP(res, req)
