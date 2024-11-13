@@ -9,18 +9,20 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/eidng8/go-simple-tree/ent/schema"
 )
 
 func Test_DeleteSimpleTree_should_delete_by_id(t *testing.T) {
 	engine, entClient, response := setupGinTest(t)
-	req, _ := http.NewRequest(http.MethodDelete, BaseUri+"/1", nil)
+	req, _ := http.NewRequest(http.MethodDelete, schema.BaseUri+"/1", nil)
 	engine.ServeHTTP(response, req)
 	assert.Equal(t, http.StatusNoContent, response.Code)
 	rs, err := entClient.QueryContext(
 		context.Background(),
 		fmt.Sprintf(
 			"SELECT `id`, `deleted_at` FROM `%s` WHERE `id` = 1",
-			TableName,
+			schema.TableName,
 		),
 	)
 	defer func(rs *stdsql.Rows) {
@@ -42,7 +44,7 @@ func Test_DeleteSimpleTree_should_physically_delete_if_requested(t *testing.T) {
 	entClient.SimpleTree.UpdateOneID(1).SetDeletedAt(time.Now()).
 		ExecX(context.Background())
 	req, _ := http.NewRequest(
-		http.MethodDelete, BaseUri+"/1?trashed=1", nil,
+		http.MethodDelete, schema.BaseUri+"/1?trashed=1", nil,
 	)
 	engine.ServeHTTP(response, req)
 	assert.Equal(t, http.StatusNoContent, response.Code)
@@ -50,7 +52,7 @@ func Test_DeleteSimpleTree_should_physically_delete_if_requested(t *testing.T) {
 		context.Background(),
 		fmt.Sprintf(
 			"SELECT `id`, `deleted_at` FROM `%s` WHERE `id` = 1",
-			TableName,
+			schema.TableName,
 		),
 	)
 	defer func(rs *stdsql.Rows) {
@@ -64,7 +66,9 @@ func Test_DeleteSimpleTree_should_physically_delete_if_requested(t *testing.T) {
 
 func Test_DeleteSimpleTree_should_return_404_if_not_found(t *testing.T) {
 	engine, _, res := setupGinTest(t)
-	req, _ := http.NewRequest(http.MethodDelete, BaseUri+"/987654321", nil)
+	req, _ := http.NewRequest(
+		http.MethodDelete, schema.BaseUri+"/987654321", nil,
+	)
 	engine.ServeHTTP(res, req)
 	assert.Equal(t, http.StatusNotFound, res.Code)
 }

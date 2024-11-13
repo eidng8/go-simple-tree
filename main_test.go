@@ -16,12 +16,6 @@ import (
 	"github.com/eidng8/go-simple-tree/ent/enttest"
 )
 
-// BaseUri is the base URI for the OpenAPI endpoints.
-const BaseUri = "/simple-tree"
-
-// TableName is the name of the table in the database.
-const TableName = "simple_tree"
-
 var jsoniter = jitr.ConfigCompatibleWithStandardLibrary
 
 func setupGinTest(tb testing.TB) (
