@@ -18,21 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/oapi-codegen/runtime"
 	strictgin "github.com/oapi-codegen/runtime/strictmiddleware/gin"
-
-	"github.com/eidng8/go-simple-tree/ent"
 )
-
-func handleErrorResponse(ctx *gin.Context, err error) {
-	_ = ctx.Error(err)
-	switch {
-	case ent.IsValidationError(err):
-		ctx.Status(http.StatusUnprocessableEntity)
-	case ent.IsNotFound(err):
-		ctx.Status(http.StatusNotFound)
-	default:
-		ctx.Status(http.StatusInternalServerError)
-	}
-}
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -51,15 +37,15 @@ type ServerInterface interface {
 	// Updates a SimpleTree
 	// (PATCH /simple-tree/{id})
 	UpdateSimpleTree(c *gin.Context, id uint32)
-	// List attached Children
+	// List of subordinate items
 	// (GET /simple-tree/{id}/children)
 	ListSimpleTreeChildren(c *gin.Context, id uint32, params ListSimpleTreeChildrenParams)
 	// Find the attached SimpleTree
 	// (GET /simple-tree/{id}/parent)
 	ReadSimpleTreeParent(c *gin.Context, id uint32)
-
+	// Restore a trashed record
 	// (POST /simple-tree/{id}/restore)
-	PostSimpleTreeIdRestore(c *gin.Context, id uint32)
+	RestoreSimpleTree(c *gin.Context, id uint32)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -311,8 +297,8 @@ func (siw *ServerInterfaceWrapper) ReadSimpleTreeParent(c *gin.Context) {
 	siw.Handler.ReadSimpleTreeParent(c, id)
 }
 
-// PostSimpleTreeIdRestore operation middleware
-func (siw *ServerInterfaceWrapper) PostSimpleTreeIdRestore(c *gin.Context) {
+// RestoreSimpleTree operation middleware
+func (siw *ServerInterfaceWrapper) RestoreSimpleTree(c *gin.Context) {
 
 	var err error
 
@@ -332,7 +318,7 @@ func (siw *ServerInterfaceWrapper) PostSimpleTreeIdRestore(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.PostSimpleTreeIdRestore(c, id)
+	siw.Handler.RestoreSimpleTree(c, id)
 }
 
 // GinServerOptions provides options for the Gin server.
@@ -369,7 +355,7 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 	router.PATCH(options.BaseURL+"/simple-tree/:id", wrapper.UpdateSimpleTree)
 	router.GET(options.BaseURL+"/simple-tree/:id/children", wrapper.ListSimpleTreeChildren)
 	router.GET(options.BaseURL+"/simple-tree/:id/parent", wrapper.ReadSimpleTreeParent)
-	router.POST(options.BaseURL+"/simple-tree/:id/restore", wrapper.PostSimpleTreeIdRestore)
+	router.POST(options.BaseURL+"/simple-tree/:id/restore", wrapper.RestoreSimpleTree)
 }
 
 type N400JSONResponse struct {
@@ -833,52 +819,52 @@ func (response ReadSimpleTreeParent500JSONResponse) VisitReadSimpleTreeParentRes
 	return json.NewEncoder(w).Encode(response)
 }
 
-type PostSimpleTreeIdRestoreRequestObject struct {
+type RestoreSimpleTreeRequestObject struct {
 	Id uint32 `json:"id"`
 }
 
-type PostSimpleTreeIdRestoreResponseObject interface {
-	VisitPostSimpleTreeIdRestoreResponse(w http.ResponseWriter) error
+type RestoreSimpleTreeResponseObject interface {
+	VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error
 }
 
-type PostSimpleTreeIdRestore204Response struct {
+type RestoreSimpleTree204Response struct {
 }
 
-func (response PostSimpleTreeIdRestore204Response) VisitPostSimpleTreeIdRestoreResponse(w http.ResponseWriter) error {
+func (response RestoreSimpleTree204Response) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
 	w.WriteHeader(204)
 	return nil
 }
 
-type PostSimpleTreeIdRestore400JSONResponse struct{ N400JSONResponse }
+type RestoreSimpleTree400JSONResponse struct{ N400JSONResponse }
 
-func (response PostSimpleTreeIdRestore400JSONResponse) VisitPostSimpleTreeIdRestoreResponse(w http.ResponseWriter) error {
+func (response RestoreSimpleTree400JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type PostSimpleTreeIdRestore404JSONResponse struct{ N404JSONResponse }
+type RestoreSimpleTree404JSONResponse struct{ N404JSONResponse }
 
-func (response PostSimpleTreeIdRestore404JSONResponse) VisitPostSimpleTreeIdRestoreResponse(w http.ResponseWriter) error {
+func (response RestoreSimpleTree404JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(404)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type PostSimpleTreeIdRestore409JSONResponse struct{ N409JSONResponse }
+type RestoreSimpleTree409JSONResponse struct{ N409JSONResponse }
 
-func (response PostSimpleTreeIdRestore409JSONResponse) VisitPostSimpleTreeIdRestoreResponse(w http.ResponseWriter) error {
+func (response RestoreSimpleTree409JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(409)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type PostSimpleTreeIdRestore500JSONResponse struct{ N500JSONResponse }
+type RestoreSimpleTree500JSONResponse struct{ N500JSONResponse }
 
-func (response PostSimpleTreeIdRestore500JSONResponse) VisitPostSimpleTreeIdRestoreResponse(w http.ResponseWriter) error {
+func (response RestoreSimpleTree500JSONResponse) VisitRestoreSimpleTreeResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
 
@@ -902,15 +888,15 @@ type StrictServerInterface interface {
 	// Updates a SimpleTree
 	// (PATCH /simple-tree/{id})
 	UpdateSimpleTree(ctx context.Context, request UpdateSimpleTreeRequestObject) (UpdateSimpleTreeResponseObject, error)
-	// List attached Children
+	// List of subordinate items
 	// (GET /simple-tree/{id}/children)
 	ListSimpleTreeChildren(ctx context.Context, request ListSimpleTreeChildrenRequestObject) (ListSimpleTreeChildrenResponseObject, error)
 	// Find the attached SimpleTree
 	// (GET /simple-tree/{id}/parent)
 	ReadSimpleTreeParent(ctx context.Context, request ReadSimpleTreeParentRequestObject) (ReadSimpleTreeParentResponseObject, error)
-	// Restore a trashed item
+	// Restore a trashed record
 	// (POST /simple-tree/{id}/restore)
-	PostSimpleTreeIdRestore(ctx context.Context, request PostSimpleTreeIdRestoreRequestObject) (PostSimpleTreeIdRestoreResponseObject, error)
+	RestoreSimpleTree(ctx context.Context, request RestoreSimpleTreeRequestObject) (RestoreSimpleTreeResponseObject, error)
 }
 
 type StrictHandlerFunc = strictgin.StrictGinHandlerFunc
@@ -1124,25 +1110,25 @@ func (sh *strictHandler) ReadSimpleTreeParent(ctx *gin.Context, id uint32) {
 	}
 }
 
-// PostSimpleTreeIdRestore operation middleware
-func (sh *strictHandler) PostSimpleTreeIdRestore(ctx *gin.Context, id uint32) {
-	var request PostSimpleTreeIdRestoreRequestObject
+// RestoreSimpleTree operation middleware
+func (sh *strictHandler) RestoreSimpleTree(ctx *gin.Context, id uint32) {
+	var request RestoreSimpleTreeRequestObject
 
 	request.Id = id
 
 	handler := func(ctx *gin.Context, request interface{}) (interface{}, error) {
-		return sh.ssi.PostSimpleTreeIdRestore(ctx, request.(PostSimpleTreeIdRestoreRequestObject))
+		return sh.ssi.RestoreSimpleTree(ctx, request.(RestoreSimpleTreeRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "PostSimpleTreeIdRestore")
+		handler = middleware(handler, "RestoreSimpleTree")
 	}
 
 	response, err := handler(ctx, request)
 
 	if err != nil {
 		handleErrorResponse(ctx, err)
-	} else if validResponse, ok := response.(PostSimpleTreeIdRestoreResponseObject); ok {
-		if err := validResponse.VisitPostSimpleTreeIdRestoreResponse(ctx.Writer); err != nil {
+	} else if validResponse, ok := response.(RestoreSimpleTreeResponseObject); ok {
+		if err := validResponse.VisitRestoreSimpleTreeResponse(ctx.Writer); err != nil {
 			ctx.Error(err)
 		}
 	} else if response != nil {

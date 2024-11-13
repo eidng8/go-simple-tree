@@ -22,13 +22,13 @@ const BaseUri = "/simple-tree"
 const TableName = "simple_tree"
 
 func main() {
-	err := Generate()
+	err := generate()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func Generate() error {
+func generate() error {
 	oas, err := newOasExtension()
 	if err != nil {
 		return err
@@ -50,11 +50,10 @@ func newOasExtension() (*entoas.Extension, error) {
 				genSpec(s)
 				constraintRequestBody(s.Paths)
 				ep := s.Paths[BaseUri]
-				simpletree.RemoveEdges(ep.Post)
 				op := ep.Get
 				op.AddParameters(nameParam())
-				paginate.FixParamNames(op.Parameters)
-				paginate.SetResponse(
+				simpletree.RemoveEdges(ep.Post)
+				paginate.AttachTo(
 					op, "Paginated list of items",
 					"#/components/schemas/SimpleTreeList",
 				)
@@ -67,31 +66,19 @@ func newOasExtension() (*entoas.Extension, error) {
 				if err != nil {
 					return err
 				}
-				ep = s.Paths[BaseUri+"/{id}/children"]
-				op = ep.Get
+				op = s.Paths[BaseUri+"/{id}/children"].Get
 				op.AddParameters(nameParam())
 				op.SetSummary("List of subordinate items")
-				op.SetDescription("List of subordinate items of the specified item")
-				paginate.FixParamNames(op.Parameters)
-				paginate.SetResponse(
+				simpletree.AttachTo(op)
+				paginate.AttachTo(
 					op,
 					"Paginated list of subordinate items. Pagination is disabled when `recurse` is true.",
 					"#/components/schemas/SimpleTreeList",
 				)
-				simpletree.AttachTo(op)
 				return nil
 			},
 		),
 	)
-}
-
-func changeBaseUri(spec *ogen.Spec) {
-	paths := make(ogen.Paths, len(spec.Paths))
-	for key, path := range spec.Paths {
-		nk := strings.Replace(key, "/simple-trees", BaseUri, 1)
-		paths[nk] = path
-	}
-	spec.SetPaths(paths)
 }
 
 func genConfig() *gen.Config {
@@ -103,6 +90,15 @@ func genConfig() *gen.Config {
 			gen.FeatureVersionedMigration,
 		},
 	}
+}
+
+func changeBaseUri(spec *ogen.Spec) {
+	paths := make(ogen.Paths, len(spec.Paths))
+	for key, path := range spec.Paths {
+		nk := strings.Replace(key, "/simple-trees", BaseUri, 1)
+		paths[nk] = path
+	}
+	spec.SetPaths(paths)
 }
 
 func genSpec(s *ogen.Spec) {

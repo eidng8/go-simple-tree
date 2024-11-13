@@ -6,7 +6,7 @@ require (
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.1
 	github.com/eidng8/go-db v0.0.3
-	github.com/eidng8/go-ent v0.0.9
+	github.com/eidng8/go-ent v0.0.10
 	github.com/eidng8/go-url v0.0.1
 	github.com/getkin/kin-openapi v0.128.0
 	github.com/gin-gonic/gin v1.10.0

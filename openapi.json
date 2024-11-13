@@ -392,8 +392,8 @@
         "tags": [
           "SimpleTree"
         ],
-        "summary": "List attached Children",
-        "description": "List attached Children.",
+        "summary": "List of subordinate items",
+        "description": "List attached Childrens.",
         "operationId": "listSimpleTreeChildren",
         "parameters": [
           {
@@ -592,6 +592,9 @@
     },
     "/simple-tree/{id}/restore": {
       "post": {
+        "summary": "Restore a trashed record",
+        "description": "Restore a record that was previously soft deleted",
+        "operationId": "RestoreSimpleTree",
         "parameters": [
           {
             "name": "id",
