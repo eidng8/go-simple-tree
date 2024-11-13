@@ -50,11 +50,12 @@ func newOasExtension() (*entoas.Extension, error) {
 				genSpec(s)
 				constraintRequestBody(s.Paths)
 				ep := s.Paths[BaseUri]
-				ep.Get.AddParameters(nameParam())
 				simpletree.RemoveEdges(ep.Post)
-				paginate.FixParamNames(ep.Get.Parameters)
+				op := ep.Get
+				op.AddParameters(nameParam())
+				paginate.FixParamNames(op.Parameters)
 				paginate.SetResponse(
-					ep.Get, "Paginated list of items",
+					op, "Paginated list of items",
 					"#/components/schemas/SimpleTreeList",
 				)
 				ep = s.Paths[BaseUri+"/{id}"]
@@ -67,14 +68,17 @@ func newOasExtension() (*entoas.Extension, error) {
 					return err
 				}
 				ep = s.Paths[BaseUri+"/{id}/children"]
-				ep.Get.AddParameters(nameParam())
-				paginate.FixParamNames(ep.Get.Parameters)
+				op = ep.Get
+				op.AddParameters(nameParam())
+				op.SetSummary("List of subordinate items")
+				op.SetDescription("List of subordinate items of the specified item")
+				paginate.FixParamNames(op.Parameters)
 				paginate.SetResponse(
-					ep.Get,
+					op,
 					"Paginated list of subordinate items. Pagination is disabled when `recurse` is true.",
 					"#/components/schemas/SimpleTreeList",
 				)
-				simpletree.AttachTo(ep.Get)
+				simpletree.AttachTo(op)
 				return nil
 			},
 		),
