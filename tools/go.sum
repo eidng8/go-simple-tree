@@ -35,8 +35,8 @@ github.com/dlclark/regexp2 v1.11.4/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cn
 github.com/dprotaso/go-yit v0.0.0-20191028211022-135eb7262960/go.mod h1:9HQzr9D/0PGwMEbC3d5AB7oi67+h4TsQqItC1GVYG58=
 github.com/dprotaso/go-yit v0.0.0-20220510233725-9ba8df137936 h1:PRxIJD8XjimM5aTknUK9w6DHLDox2r2M3DI4i2pnd3w=
 github.com/dprotaso/go-yit v0.0.0-20220510233725-9ba8df137936/go.mod h1:ttYvX5qlB+mlV1okblJqcSMtR4c52UKxDiX9GRBS8+Q=
-github.com/eidng8/go-ent v0.0.11 h1:+YFuax+gHW1JjjHBOmDIqI60UvcwbKfV9VU7gH4+tOI=
-github.com/eidng8/go-ent v0.0.11/go.mod h1:PFgn7O39RFd7gZUXQDTeqwOr55bsZelWncS4mm23vYk=
+github.com/eidng8/go-ent v0.0.13 h1:GBQxApvnAmfMCfawZuIeJu4ESHIs/fzWHcJRs4SoKbw=
+github.com/eidng8/go-ent v0.0.13/go.mod h1:PFgn7O39RFd7gZUXQDTeqwOr55bsZelWncS4mm23vYk=
 github.com/eidng8/go-url v0.0.1 h1:lOZp+nFZLUO5VL6NHDgAUPoj/lCtzxzTFWEezBRU42Q=
 github.com/eidng8/go-url v0.0.1/go.mod h1:jOFyorb+Kg6jCJquQhXRTp48c5jlqyBrTwNWflctAJg=
 github.com/fatih/color v1.18.0 h1:S8gINlzdQ840/4pfAwic/ZE0djQEH3wM94VfqLTZcOM=
