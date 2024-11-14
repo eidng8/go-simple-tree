@@ -71,3 +71,47 @@ func genSpec(s *ogen.Spec) {
 		SetDescription("This is an API listing hierarchical tree data")
 }
 ```
+
+## Environment Variables
+
+The following environment variables are needed to stat the service.
+
+#### DB_DRIVER
+
+REQUIRED and cannot be empty. Determines what kind of database to connect. Can be any driver supported by `database/sql`, such as `mysql`, `sqlite3`, `pgx`, etc. Remember to import proper driver module to your package.
+
+#### DB_DSN
+
+REQUIRED for connections other than MySQL. A complete DSN string to be used to establish connection to database. When set, this variable is passed directly to `sql.Open()`. For MySQL, if this variable is not set, variables below will be used to configure the connection.
+
+#### Variables specific to MySQL
+
+These variables are used to configure the connection to MySQL, if `DB_DSN` is not set.
+
+##### DB_USER
+
+REQUIRED and cannot be empty. Determines the username to connect to database.
+
+##### DB_PASSWORD
+
+REQUIRED and cannot be empty. Determines the password to connect to database.
+
+##### DB_HOST
+
+REQUIRED and cannot be empty. Determines the host to connect to.
+
+##### DB_NAME
+
+REQUIRED and cannot be empty. Determines the database name to connect to.
+
+##### DB_PROTOCOL
+
+OPTIONAL and defaults to `tcp`.
+
+##### DB_COLLATION
+
+OPTIONAL and defaults to `utf8mb4_unicode_ci`.
+
+##### DB_TIMEZONE
+
+OPTIONAL and defaults to `UTC`.
