@@ -29,7 +29,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to setup server: %s", err)
 	}
-	if err = engine.Run(getEnvWithDefault("LISTEN_ADDR", ":80")); err != nil {
+	if err = engine.Run(getEnvWithDefault("LISTEN", ":80")); err != nil {
 		log.Fatalf("Server exits due to fatal error: %s", err)
 	}
 }

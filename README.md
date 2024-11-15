@@ -76,7 +76,7 @@ func genSpec(s *ogen.Spec) {
 
 The following environment variables are needed to stat the service.
 
-#### LISTEN_ADDR
+#### LISTEN
 
 REQUIRED and defaults to `:80`. Determines the gin server listening TCP network address. e.g. `localhost:8080`.
 
