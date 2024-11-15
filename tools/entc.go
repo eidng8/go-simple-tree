@@ -19,7 +19,7 @@ import (
 const BaseUri = "/simple-tree"
 
 // TableName is the name of the table in the database.
-const TableName = "simple_tree"
+const TableName = "items"
 
 func main() {
 	err := generate()
