@@ -41,7 +41,9 @@ func setupGinTest(tb testing.TB) (
 
 func fixture(client *ent.Client) {
 	ctx := context.Background()
+	items := make([]*ent.ItemCreate, 50)
 	for i := range 50 {
-		client.Item.Create().SetName(fmt.Sprintf("name %d", i)).SaveX(ctx)
+		items[i] = client.Item.Create().SetName(fmt.Sprintf("name %d", i))
 	}
+	client.Item.CreateBulk(items...).SaveX(ctx)
 }
