@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -18,20 +19,13 @@ func newServer(entClient *ent.Client) Server {
 	return Server{EC: entClient}
 }
 
-func newEngine(mode string, entClient *ent.Client) (*gin.Engine, error) {
+func newEngine(entClient *ent.Client) (*gin.Engine, error) {
 	swagger, err := GetSwagger()
 	if err != nil {
 		return nil, err
 	}
 	swagger.Servers = nil
-	switch mode {
-	case gin.DebugMode:
-		gin.SetMode(gin.DebugMode)
-	case gin.TestMode:
-		gin.SetMode(gin.TestMode)
-	default:
-		gin.SetMode(gin.ReleaseMode)
-	}
+	getEnvWithDefault(gin.EnvGinMode, gin.ReleaseMode)
 	engine := gin.Default()
 	server := newServer(entClient)
 	handler := NewStrictHandler(server, []StrictMiddlewareFunc{})
@@ -62,4 +56,12 @@ func handleErrorResponse(ctx *gin.Context, err error) {
 	default:
 		ctx.Status(http.StatusInternalServerError)
 	}
+}
+
+func getEnvWithDefault(name, defVal string) string {
+	val := os.Getenv(name)
+	if "" == val {
+		return defVal
+	}
+	return val
 }

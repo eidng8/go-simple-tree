@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"os"
 
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/eidng8/go-db"
@@ -16,8 +15,7 @@ import (
 
 func main() {
 	entClient := getEntClient()
-	mode := getenvd("SERVER_MODE", gin.ReleaseMode)
-	engine, err := newEngine(mode, entClient)
+	engine, err := newEngine(entClient)
 	if err != nil {
 		log.Fatalf("Failed to create server: %s", err)
 	}
@@ -29,10 +27,10 @@ func main() {
 	}(entClient)
 	err = setup(engine, entClient)
 	if err != nil {
-		return
+		log.Fatalf("Failed to setup server: %s", err)
 	}
-	if err = engine.Run(getenv("LISTEN_ADDR")); err != nil {
-		log.Fatalf("Failed to start server: %s", err)
+	if err = engine.Run(getEnvWithDefault("LISTEN_ADDR", ":80")); err != nil {
+		log.Fatalf("Server exits due to fatal error: %s", err)
 	}
 }
 
@@ -48,20 +46,4 @@ func setup(gc *gin.Engine, ec *ent.Client) error {
 
 func getEntClient() *ent.Client {
 	return ent.NewClient(ent.Driver(entsql.OpenDB(db.ConnectX())))
-}
-
-func getenv(name string) string {
-	val := os.Getenv(name)
-	if "" == val {
-		log.Fatalf("%v environment variable is not set", name)
-	}
-	return val
-}
-
-func getenvd(name, defval string) string {
-	val := os.Getenv(name)
-	if "" == val {
-		return defval
-	}
-	return val
 }

@@ -76,6 +76,14 @@ func genSpec(s *ogen.Spec) {
 
 The following environment variables are needed to stat the service.
 
+#### LISTEN_ADDR
+
+REQUIRED and defaults to `:80`. Determines the gin server listening TCP network address. e.g. `localhost:8080`.
+
+#### GIN_MODE
+
+OPTIONAL and defaults to `release`. Can be one of `debug`, `test`, or `release`.
+
 #### DB_DRIVER
 
 REQUIRED and cannot be empty. Determines what kind of database to connect. Can be any driver supported by `database/sql`, such as `mysql`, `sqlite3`, `pgx`, etc. Remember to import proper driver module to your package.
