@@ -3,18 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/http"
 
 	"github.com/eidng8/go-simple-tree/ent"
 )
-
-type UpdateItem201JSONResponse ItemCreate
-
-func (response UpdateItem201JSONResponse) VisitUpdateItemResponse(w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(201)
-	return json.NewEncoder(w).Encode(response)
-}
 
 // UpdateItem Updates a Item
 // (PATCH /simple-tree/{id})
@@ -51,17 +42,9 @@ func (s Server) UpdateItem(
 	if err != nil {
 		return nil, err
 	}
-
-	var pid *uint32
-	if nil == aa.ParentID {
-		pid = nil
-	} else {
-		val := *aa.ParentID
-		pid = &val
-	}
-	return UpdateItem201JSONResponse{
+	return UpdateItem200JSONResponse{
 		Id:        aa.ID,
-		ParentId:  pid,
+		ParentId:  aa.ParentID,
 		Name:      aa.Name,
 		CreatedAt: aa.CreatedAt,
 		UpdatedAt: aa.UpdatedAt,

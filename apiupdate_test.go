@@ -22,13 +22,13 @@ func Test_UpdateItem_updates_existing_record(t *testing.T) {
 		io.NopCloser(strings.NewReader(body)),
 	)
 	engine.ServeHTTP(res, req)
-	assert.Equal(t, http.StatusCreated, res.Code)
+	assert.Equal(t, http.StatusOK, res.Code)
 	actual := res.Body.String()
 	aa := entClient.Item.Query().Where(item.NameEQ("test name")).
 		Where(item.IDEQ(2)).OnlyX(context.Background())
 	pid := uint32(1)
 	b, err := json.Marshal(
-		CreateItem201JSONResponse{
+		UpdateItem200JSONResponse{
 			Id:        2,
 			ParentId:  &pid,
 			Name:      "test name",
