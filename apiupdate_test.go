@@ -9,14 +9,13 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/eidng8/go-simple-tree/ent/item"
 	"github.com/eidng8/go-simple-tree/ent/schema"
 )
 
 func Test_UpdateItem_updates_existing_record(t *testing.T) {
-	engine, entClient, res := setupGinTest(t)
+	_, engine, entClient, res := setupGinTest(t)
 	body := `{"name":"test name","abbr":"test abbr","parent_id":1}`
 	req, _ := http.NewRequest(
 		http.MethodPatch, schema.BaseUri+"/2",
@@ -28,7 +27,7 @@ func Test_UpdateItem_updates_existing_record(t *testing.T) {
 	aa := entClient.Item.Query().Where(item.NameEQ("test name")).
 		Where(item.IDEQ(2)).OnlyX(context.Background())
 	pid := uint32(1)
-	b, err := jsoniter.Marshal(
+	b, err := json.Marshal(
 		CreateItem201JSONResponse{
 			Id:        2,
 			ParentId:  &pid,
@@ -39,11 +38,11 @@ func Test_UpdateItem_updates_existing_record(t *testing.T) {
 	)
 	assert.Nil(t, err)
 	expected := string(b)
-	require.JSONEq(t, expected, actual)
+	assert.JSONEq(t, expected, actual)
 }
 
 func Test_UpdateItem_reports_404_if_update_deleted_record(t *testing.T) {
-	engine, entClient, res := setupGinTest(t)
+	_, engine, entClient, res := setupGinTest(t)
 	entClient.Item.UpdateOneID(2).SetDeletedAt(time.Now()).ExecX(context.Background())
 	body := `{"name":"test name","abbr":"test abbr","parent_id":1}`
 	req, _ := http.NewRequest(
@@ -55,7 +54,7 @@ func Test_UpdateItem_reports_404_if_update_deleted_record(t *testing.T) {
 }
 
 func Test_UpdateItem_reports_422_if_request_body_invalid(t *testing.T) {
-	engine, _, res := setupGinTest(t)
+	_, engine, _, res := setupGinTest(t)
 	body := `{"name":"a","parent_id":1}`
 	req, _ := http.NewRequest(
 		http.MethodPatch, schema.BaseUri+"/2",
@@ -66,7 +65,7 @@ func Test_UpdateItem_reports_422_if_request_body_invalid(t *testing.T) {
 }
 
 func Test_UpdateItem_reports_422_if_parentId_equals_self(t *testing.T) {
-	engine, _, res := setupGinTest(t)
+	_, engine, _, res := setupGinTest(t)
 	body := `{"parent_id":1}`
 	req, _ := http.NewRequest(
 		http.MethodPatch, schema.BaseUri+"/1",

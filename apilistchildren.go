@@ -22,24 +22,29 @@ func (s Server) ListItemChildren(
 	applyChildrenNameFilter(request, query)
 	id := request.Id
 	if nil != request.Params.Recurse && *request.Params.Recurse {
-		return getDescendants(gc, ctx, query, id)
+		return s.getDescendants(gc, ctx, query, id)
 	}
-	return getPage(gc, ctx, query, id)
+	return s.getPage(gc, ctx, query, id)
 }
 
-func getPage(
+func (s Server) getPage(
 	gc *gin.Context, qc context.Context, query *ent.ItemQuery, id uint32,
 ) (ListItemChildrenResponseObject, error) {
 	query.Where(item.HasParentWith(item.ID(id)))
-	pageParams := paginate.GetPaginationParams(gc)
-	areas, err := paginate.GetPage[ent.Item](gc, qc, query, pageParams)
+	paginator := paginate.Paginator[ent.Item, ent.ItemQuery, *ent.ItemQuery]{
+		BaseUrl:  s.BaseURL,
+		Query:    query,
+		GinCtx:   gc,
+		QueryCtx: qc,
+	}
+	areas, err := paginator.GetPage()
 	if err != nil {
 		return nil, err
 	}
 	return mapPage[ListItemChildren200JSONResponse](areas), nil
 }
 
-func getDescendants(
+func (s Server) getDescendants(
 	gc *gin.Context, qc context.Context, query *ent.ItemQuery, id uint32,
 ) (ListItemChildrenResponseObject, error) {
 	areas, err := query.QueryChildrenRecursive(id).All(qc)
@@ -48,7 +53,13 @@ func getDescendants(
 	}
 	count := len(areas)
 	req := gc.Request
-	u := paginate.UrlWithoutPageParams(req)
+	paginator := paginate.Paginator[ent.Item, ent.ItemQuery, *ent.ItemQuery]{
+		BaseUrl:  s.BaseURL,
+		Query:    nil,
+		GinCtx:   gc,
+		QueryCtx: qc,
+	}
+	u := paginator.UrlWithoutPageParams()
 	u = url.WithQueryParam(*u, "recurse", "1")
 	return ListItemChildren200JSONResponse{
 		CurrentPage:  1,

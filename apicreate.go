@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 
 	"github.com/eidng8/go-simple-tree/ent"

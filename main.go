@@ -15,7 +15,7 @@ import (
 
 func main() {
 	entClient := getEntClient()
-	engine, err := newEngine(entClient)
+	_, engine, err := newEngine(entClient)
 	if err != nil {
 		log.Fatalf("Failed to create server: %s", err)
 	}

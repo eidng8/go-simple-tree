@@ -27,7 +27,7 @@ A simple hierarchical tree listing OpenAPI v3 microservice.
 package schema
 
 import (
-	// imports...
+    // imports...
 )
 
 /* Change these 2 constants to match your project. */
@@ -39,7 +39,7 @@ const BaseUri = "/your-endpoint-base-uri"
 const TableName = "your_database_table_name"
 
 type Item struct {
-	// ........
+    // ........
 }
 ```
 
@@ -48,7 +48,7 @@ type Item struct {
 package main
 
 import (
-	// imports...
+    // imports...
 )
 
 /* Change these 2 constants to match your project. */
@@ -60,21 +60,25 @@ const BaseUri = "/your-endpoint-base-uri"
 const TableName = "your_database_table_name"
 
 func main() {
-	// ........
+    // ........
 }
 
 // ...... snipped ......
 
 func genSpec(s *ogen.Spec) {
-	/* Change these information to match your project. */
-	s.Info.SetTitle("Simple tree listing API").SetVersion("0.0.1").
-		SetDescription("This is an API listing hierarchical tree data")
+    /* Change these information to match your project. */
+    s.Info.SetTitle("Simple tree listing API").SetVersion("0.0.1").
+        SetDescription("This is an API listing hierarchical tree data")
 }
 ```
 
 ## Environment Variables
 
 The following environment variables are needed to stat the service.
+
+#### BASE_URL
+
+REQUIRED and cannot be empty. Determines the base URL for all URL generation. It should be the fully qualified URL without endpoint path.
 
 #### LISTEN
 

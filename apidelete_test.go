@@ -14,7 +14,7 @@ import (
 )
 
 func Test_DeleteItem_should_delete_by_id(t *testing.T) {
-	engine, entClient, response := setupGinTest(t)
+	_, engine, entClient, response := setupGinTest(t)
 	req, _ := http.NewRequest(http.MethodDelete, schema.BaseUri+"/1", nil)
 	engine.ServeHTTP(response, req)
 	assert.Equal(t, http.StatusNoContent, response.Code)
@@ -40,7 +40,7 @@ func Test_DeleteItem_should_delete_by_id(t *testing.T) {
 }
 
 func Test_DeleteItem_should_physically_delete_if_requested(t *testing.T) {
-	engine, entClient, response := setupGinTest(t)
+	_, engine, entClient, response := setupGinTest(t)
 	entClient.Item.UpdateOneID(1).SetDeletedAt(time.Now()).
 		ExecX(context.Background())
 	req, _ := http.NewRequest(
@@ -65,7 +65,7 @@ func Test_DeleteItem_should_physically_delete_if_requested(t *testing.T) {
 }
 
 func Test_DeleteItem_should_return_404_if_not_found(t *testing.T) {
-	engine, _, res := setupGinTest(t)
+	_, engine, _, res := setupGinTest(t)
 	req, _ := http.NewRequest(
 		http.MethodDelete, schema.BaseUri+"/987654321", nil,
 	)

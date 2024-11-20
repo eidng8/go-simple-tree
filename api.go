@@ -3,26 +3,40 @@ package main
 import (
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	jsoniter "github.com/json-iterator/go"
 
 	"github.com/eidng8/go-simple-tree/ent"
+	"github.com/eidng8/go-simple-tree/ent/schema"
 )
 
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
 type Server struct {
-	EC *ent.Client
+	EC      *ent.Client
+	BaseURL string
+}
+
+func (s Server) BaseUrl() string {
+	return strings.TrimRight(s.BaseURL, "/") + "/" +
+		strings.TrimLeft(schema.BaseUri, "/")
 }
 
 var _ StrictServerInterface = (*Server)(nil)
 
 func newServer(entClient *ent.Client) Server {
-	return Server{EC: entClient}
+	return Server{
+		EC:      entClient,
+		BaseURL: os.Getenv("BASE_URL"),
+	}
 }
 
-func newEngine(entClient *ent.Client) (*gin.Engine, error) {
+func newEngine(entClient *ent.Client) (*Server, *gin.Engine, error) {
 	swagger, err := GetSwagger()
 	if err != nil {
-		return nil, err
+		return &Server{}, nil, err
 	}
 	swagger.Servers = nil
 	getEnvWithDefault(gin.EnvGinMode, gin.ReleaseMode)
@@ -42,7 +56,7 @@ func newEngine(entClient *ent.Client) (*gin.Engine, error) {
 	// 		},
 	// 	},
 	// )
-	return engine, nil
+	return &server, engine, nil
 }
 
 // handleErrorResponse replaces oapi-codegen generated error handling.

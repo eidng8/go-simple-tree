@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # To generate the schema and the migration files, issue one of the following commands:
 #atlas migrate diff init_db --dir "file://ent/migrate/migrations" --to "ent://ent/schema" --dev-url "docker://mysql/8/ent"

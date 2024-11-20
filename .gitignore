@@ -2,6 +2,7 @@
 ent/*
 ent/migrate/*
 tools/*.gen.go
+client/tools/*.gen.go
 
 !ent/errors.go
 !ent/schema/

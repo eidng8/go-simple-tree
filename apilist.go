@@ -18,12 +18,17 @@ import (
 func (s Server) ListItem(
 	ctx context.Context, request ListItemRequestObject,
 ) (ListItemResponseObject, error) {
-	c := ctx.(*gin.Context)
-	pageParams := paginate.GetPaginationParams(c)
+	gc := ctx.(*gin.Context)
 	query := s.EC.Item.Query().Order(item.ByID())
 	qc := softdelete.NewSoftDeleteQueryContext(request.Params.Trashed, ctx)
 	applyNameFilter(request, query)
-	areas, err := paginate.GetPage[ent.Item](c, qc, query, pageParams)
+	paginator := paginate.Paginator[ent.Item, ent.ItemQuery, *ent.ItemQuery]{
+		BaseUrl:  s.BaseURL,
+		Query:    query,
+		GinCtx:   gc,
+		QueryCtx: qc,
+	}
+	areas, err := paginator.GetPage()
 	if err != nil {
 		return nil, err
 	}

@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"net/http/httptest"
+	"os"
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	jitr "github.com/json-iterator/go"
 	"github.com/stretchr/testify/assert"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -16,11 +16,10 @@ import (
 	"github.com/eidng8/go-simple-tree/ent/enttest"
 )
 
-var jsoniter = jitr.ConfigCompatibleWithStandardLibrary
-
 func setupGinTest(tb testing.TB) (
-	*gin.Engine, *ent.Client, *httptest.ResponseRecorder,
+	*Server, *gin.Engine, *ent.Client, *httptest.ResponseRecorder,
 ) {
+	assert.Nil(tb, os.Setenv("BASE_URL", "http://localhost"))
 	// assert.Nil(tb, os.Setenv("DB_DRIVER", "mysql"))
 	// assert.Nil(tb, os.Setenv("DB_USER", "root"))
 	// assert.Nil(tb, os.Setenv("DB_PASSWORD", "123456"))
@@ -32,11 +31,11 @@ func setupGinTest(tb testing.TB) (
 			_ = entClient.Close()
 		},
 	)
-	engine, err := newEngine(entClient)
+	server, engine, err := newEngine(entClient)
 	assert.Nil(tb, err)
 	assert.Nil(tb, setup(engine, entClient))
 	fixture(entClient)
-	return engine, entClient, httptest.NewRecorder()
+	return server, engine, entClient, httptest.NewRecorder()
 }
 
 func fixture(client *ent.Client) {
