@@ -2,6 +2,9 @@
 
 A simple hierarchical tree listing OpenAPI v3 microservice.
 
+Every item has one parent at maximum, and can have multiple children.
+The service is generated using `ent`, `entoas` and `oapi-codegen` tools.
+
 
 ## Usage
 
