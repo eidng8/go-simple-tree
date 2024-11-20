@@ -1,0 +1,11 @@
+{
+  "package": "client",
+  "generate": {
+    "models": true,
+    "client": true
+  },
+  "output": "tools/client.gen.go",
+  "output-options": {
+    "nullable-type": true
+  }
+}
