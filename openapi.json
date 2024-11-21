@@ -393,7 +393,7 @@
           "Item"
         ],
         "summary": "List of subordinate items",
-        "description": "List attached Childrens.",
+        "description": "List attached children.",
         "operationId": "listItemChildren",
         "parameters": [
           {
