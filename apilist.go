@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"unicode/utf8"
 
 	"github.com/eidng8/go-ent/softdelete"
@@ -13,6 +14,16 @@ import (
 	"github.com/eidng8/go-simple-tree/ent/item"
 )
 
+type ListItemPaginatedResponse struct {
+	*paginate.PaginatedList[ent.Item]
+}
+
+func (response ListItemPaginatedResponse) VisitListItemResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	return json.NewEncoder(w).Encode(response)
+}
+
 // ListItem List all Items
 // (GET /simple-tree)
 func (s Server) ListItem(
@@ -22,7 +33,7 @@ func (s Server) ListItem(
 	query := s.EC.Item.Query().Order(item.ByID())
 	qc := softdelete.NewSoftDeleteQueryContext(request.Params.Trashed, ctx)
 	applyNameFilter(request, query)
-	paginator := paginate.Paginator[ent.Item, ent.ItemQuery, *ent.ItemQuery]{
+	paginator := paginate.Paginator[ent.Item, ent.ItemQuery]{
 		BaseUrl:  s.BaseURL,
 		Query:    query,
 		GinCtx:   gc,
@@ -32,7 +43,7 @@ func (s Server) ListItem(
 	if err != nil {
 		return nil, err
 	}
-	return mapPage[ListItem200JSONResponse](areas), nil
+	return ListItemPaginatedResponse{PaginatedList: areas}, nil
 }
 
 func applyNameFilter(

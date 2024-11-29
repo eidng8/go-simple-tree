@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net/http"
 	"unicode/utf8"
 
 	"github.com/eidng8/go-ent/paginate"
@@ -11,6 +12,16 @@ import (
 	"github.com/eidng8/go-simple-tree/ent"
 	"github.com/eidng8/go-simple-tree/ent/item"
 )
+
+type ListItemChildrenPaginatedResponse struct {
+	*paginate.PaginatedList[ent.Item]
+}
+
+func (response ListItemChildrenPaginatedResponse) VisitListItemChildrenResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	return json.NewEncoder(w).Encode(response)
+}
 
 // ListItemChildren List attached Children
 // (GET /simple-tree/{id}/children)
@@ -24,14 +35,14 @@ func (s Server) ListItemChildren(
 	if nil != request.Params.Recurse && *request.Params.Recurse {
 		return s.getDescendants(gc, ctx, query, id)
 	}
-	return s.getPage(gc, ctx, query, id)
+	return s.getChildrenPage(gc, ctx, query, id)
 }
 
-func (s Server) getPage(
+func (s Server) getChildrenPage(
 	gc *gin.Context, qc context.Context, query *ent.ItemQuery, id uint32,
 ) (ListItemChildrenResponseObject, error) {
 	query.Where(item.HasParentWith(item.ID(id)))
-	paginator := paginate.Paginator[ent.Item, ent.ItemQuery, *ent.ItemQuery]{
+	paginator := paginate.Paginator[ent.Item, ent.ItemQuery]{
 		BaseUrl:  s.BaseURL,
 		Query:    query,
 		GinCtx:   gc,
@@ -41,7 +52,7 @@ func (s Server) getPage(
 	if err != nil {
 		return nil, err
 	}
-	return mapPage[ListItemChildren200JSONResponse](areas), nil
+	return ListItemChildrenPaginatedResponse{PaginatedList: areas}, nil
 }
 
 func (s Server) getDescendants(
@@ -53,7 +64,7 @@ func (s Server) getDescendants(
 	}
 	count := len(areas)
 	req := gc.Request
-	paginator := paginate.Paginator[ent.Item, ent.ItemQuery, *ent.ItemQuery]{
+	paginator := paginate.Paginator[ent.Item, ent.ItemQuery]{
 		BaseUrl:  s.BaseURL,
 		Query:    nil,
 		GinCtx:   gc,
@@ -61,19 +72,21 @@ func (s Server) getDescendants(
 	}
 	u := paginator.UrlWithoutPageParams()
 	u = url.WithQueryParam(*u, "recurse", "1")
-	return ListItemChildren200JSONResponse{
-		CurrentPage:  1,
-		FirstPageUrl: u.String(),
-		From:         1,
-		LastPage:     1,
-		LastPageUrl:  "",
-		NextPageUrl:  "",
-		Path:         url.RequestBaseUrl(req).String(),
-		PerPage:      count,
-		PrevPageUrl:  "",
-		To:           count,
-		Total:        count,
-		Data:         mapItemListFromEnt(areas),
+	return ListItemChildrenPaginatedResponse{
+		PaginatedList: &paginate.PaginatedList[ent.Item]{
+			CurrentPage:  1,
+			FirstPageUrl: u.String(),
+			From:         1,
+			LastPage:     1,
+			LastPageUrl:  "",
+			NextPageUrl:  "",
+			Path:         url.RequestBaseUrl(req).String(),
+			PerPage:      count,
+			PrevPageUrl:  "",
+			To:           count,
+			Total:        count,
+			Data:         areas,
+		},
 	}, nil
 }
 

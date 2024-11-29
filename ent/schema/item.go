@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	ee "github.com/eidng8/go-ent"
 	"github.com/eidng8/go-ent/simpletree"
@@ -35,6 +36,7 @@ func (Item) Annotations() []schema.Annotation {
 		entsql.WithComments(true),
 		entsql.OnDelete(entsql.Restrict),
 		schema.Comment("Item table"),
+		edge.Annotation{StructTag: `json:"-"`},
 	}
 }
 

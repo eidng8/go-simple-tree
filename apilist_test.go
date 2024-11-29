@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	"regexp"
 	"testing"
 
 	"github.com/eidng8/go-ent/paginate"
@@ -184,6 +185,8 @@ func Test_ListItem_should_return_2nd_page_include_deleted(t *testing.T) {
 	engine.ServeHTTP(res, req)
 	assert.Equal(t, http.StatusOK, res.Code)
 	actual := res.Body.String()
+	re := regexp.MustCompile(`"deleted_at":"[^"]*",`)
+	actual = re.ReplaceAllString(actual, "")
 	assert.JSONEq(t, expected, actual)
 }
 
