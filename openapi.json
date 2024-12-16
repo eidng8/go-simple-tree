@@ -594,7 +594,7 @@
       "post": {
         "summary": "Restore a trashed record",
         "description": "Restore a record that was previously soft deleted",
-        "operationId": "RestoreItem",
+        "operationId": "restoreItem",
         "parameters": [
           {
             "name": "id",

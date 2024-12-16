@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/eidng8/go-ent/paginate"
-	"github.com/eidng8/go-url"
+	"github.com/eidng8/go-utils"
 	"github.com/gin-gonic/gin"
 
 	"github.com/eidng8/go-simple-tree/ent"
@@ -71,7 +71,7 @@ func (s Server) getDescendants(
 		QueryCtx: qc,
 	}
 	u := paginator.UrlWithoutPageParams()
-	u = url.WithQueryParam(*u, "recurse", "1")
+	u = utils.UrlWithQueryParam(*u, "recurse", "1")
 	return ListItemChildrenPaginatedResponse{
 		PaginatedList: &paginate.PaginatedList[ent.Item]{
 			CurrentPage:  1,
@@ -80,7 +80,7 @@ func (s Server) getDescendants(
 			LastPage:     1,
 			LastPageUrl:  "",
 			NextPageUrl:  "",
-			Path:         url.RequestBaseUrl(req).String(),
+			Path:         utils.RequestBaseUrl(req).String(),
 			PerPage:      count,
 			PrevPageUrl:  "",
 			To:           count,

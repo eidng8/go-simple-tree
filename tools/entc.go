@@ -9,6 +9,7 @@ import (
 	"entgo.io/contrib/entoas"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
+	ee "github.com/eidng8/go-ent/entc"
 	"github.com/eidng8/go-ent/paginate"
 	"github.com/eidng8/go-ent/simpletree"
 	"github.com/eidng8/go-ent/softdelete"
@@ -33,7 +34,7 @@ func generate() error {
 	if err != nil {
 		return err
 	}
-	ext := entc.Extensions(oas, &simpletree.Extension{})
+	ext := entc.Extensions(oas, &ee.SimpleTreeExtension{})
 	err = entc.Generate("./ent/schema", genConfig(), ext)
 	if err != nil {
 		return err
@@ -60,7 +61,7 @@ func newOasExtension() (*entoas.Extension, error) {
 				ep = s.Paths[BaseUri+"/{id}"]
 				simpletree.RemoveEdges(ep.Patch)
 				err := softdelete.AttachTo(
-					g.Nodes[0], s, BaseUri, s.Components.Schemas["ItemRead"],
+					"item", s, BaseUri, s.Components.Schemas["ItemRead"],
 					ep.Get.Parameters[0],
 				)
 				if err != nil {
